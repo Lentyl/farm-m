@@ -1,0 +1,27 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#root {
+    height: 100vh;
+
+}
+
+
+$base-font-size: 16px;
+
+$main-spacing: 20px;
+
+$main-color: #18ca00;
+
+
+
+$breakpoins: (xs: 360px,
+    sm: 480px,
+    md: 640px,
+    lg: 800px,
+    xl:1280px,
+
+);

@@ -1,0 +1,26 @@
+.App {
+    position: absolute;
+    min-width: 100%;
+    min-height: 100%;
+
+    .main-page {
+        position: relative;
+        min-width: 100%;
+        min-height: 100%;
+
+        .main-page__transition {
+            position: absolute;
+            z-index: 1;
+            top: -5px;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(rgb(52, 58, 64) 0%, rgb(52, 58, 64) 10%, transparent 100%);
+        }
+
+    }
+
+
+
+
+
+}

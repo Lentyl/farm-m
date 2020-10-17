@@ -1,0 +1,115 @@
+.header {
+    position: relative;
+    min-width: 100%;
+    align-items: center;
+    height: 10%;
+
+    .header__navbar {
+        height: 100%;
+        width: 100%;
+
+        .header__logo {
+
+            display: flex;
+
+            .header__logo-icon {
+                position: relative;
+                left: -10px;
+                bottom: 4px;
+                font-size: 30px;
+                color: rgb(0, 255, 115);
+                margin: 0 6px;
+
+                @media screen and (min-width: map-get($breakpoins, sm)) {
+                    left: 0;
+                }
+            }
+
+            .header__logo-inscription {
+                display: none;
+
+                @media screen and (min-width: map-get($breakpoins, sm)) {
+                    display: block;
+
+                }
+            }
+        }
+
+        .header__search-form {
+            position: absolute;
+            top: 10px;
+            right: 18%;
+            width: 60%;
+
+            @media screen and (min-width: map-get($breakpoins, sm)) {
+                right: 10%;
+                width: 54%;
+            }
+
+            @media screen and (min-width: map-get($breakpoins, md)) {
+                right: 8%;
+            }
+
+            @media screen and (min-width: map-get($breakpoins, lg)) {
+                right: 0;
+                width: 50%;
+            }
+
+            @media screen and (min-width: map-get($breakpoins, xl)) {}
+
+            .header_search-input {
+
+                min-height: 20px;
+                max-width: 300px;
+                width: 60%;
+            }
+
+            .header__search-button {
+
+                min-width: 70px;
+                min-height: 20px;
+            }
+        }
+
+        .header__cart-container {
+            height: 50px;
+            z-index: 1;
+
+            .header__cart-link {
+
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 50px;
+                height: 50px;
+                position: relative;
+                margin-right: 40px;
+
+                .header__cart-icon {
+                    position: relative;
+                    color: rgb(0, 255, 115);
+                    font-size: 36px;
+                }
+
+                .header__cart-item-counter {
+                    font-size: 20px;
+                    font-weight: bold;
+                    padding: 0 0 1px 6px;
+                    bottom: 14px;
+                    position: absolute;
+                    color: rgb(27, 79, 158);
+                }
+            }
+        }
+    }
+
+    .header__nav-button {
+        z-index: 1;
+        position: relative;
+        right: -10px;
+
+        @media screen and (min-width: map-get($breakpoins, sm)) {
+            right: 10px;
+        }
+    }
+}
