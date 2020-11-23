@@ -9,7 +9,6 @@ const initialState: InitialAutgState = {
 
 export default (state = initialState, action: AuthAction): InitialAutgState => {
 
-  //console.log(action.data);
   switch (action.type) {
     case SET_USER:
       return {
