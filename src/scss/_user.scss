@@ -1,4 +1,4 @@
-.sign-up {
+.user {
     background-image: url('../assets/img/sign-up-background-mobile-460x657-min.jpg');
     background-size: cover;
     background-position: center;
@@ -20,40 +20,11 @@
         background-image: url('../assets/img/sign-up-background-desktop-1980x1114-min.jpg');
     }
 
-    .sign-up__container {
+    .user__container {
         padding: 10px;
         background-color: rgba(255, 255, 255, 0.5);
         margin: 100px auto;
         position: relative;
         width: 90%;
-
-
-        .sign-up__business-form-row {
-
-            margin: 20px 0;
-
-            .sign-up__business-btn {
-                position: absolute;
-                right: 10px;
-
-            }
-
-
-        }
-
-        /* 
-        .sign-up__button-container {
-            margin-bottom: 50px;
-
-            .sign-up__button {
-                position: absolute;
-                right: 10px;
-            }
-        } */
-
-
-
     }
-
-
 }

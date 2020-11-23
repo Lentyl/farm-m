@@ -1,0 +1,111 @@
+.search {
+    /* background-image: url('../assets/img/products-background-mobile-460x435-min.jpg'); */
+    /*    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat; */
+    position: absolute;
+    width: 100%;
+    flex-grow: 1;
+    z-index: 2;
+
+    /*     @media screen and (min-width: map-get($breakpoins, sm)) {
+        background-image: url('../assets/img/products-background-mobile-800-757-min.jpg');
+    }
+
+    @media screen and (min-width: map-get($breakpoins, lg)) {
+        background-image: url('../assets/img/products-background-desktop-1280x583-min.jpg');
+    }
+
+    @media screen and (min-width: map-get($breakpoins, xl)) {
+        background-image: url('../assets/img/products-background-desktop-1980x1320-min.jpg');
+    } */
+
+    .search__container {
+        padding: 10px;
+        background-color: rgba(255, 255, 255, 0.5);
+        margin: 100px auto;
+        position: relative;
+        width: 90%;
+
+
+        .search__list-item {
+            margin: 50px 0 10px 0;
+            display: flex;
+            position: relative;
+
+            .search__details-btn {
+                position: absolute;
+                right: 10px;
+            }
+
+
+        }
+
+        .search__details-container {
+
+            display: flex;
+            justify-content: center;
+
+
+
+            .search__backwards-btn {
+                border: 1px solid black;
+                position: absolute;
+                top: 10px;
+                right: 3%;
+
+                color: black;
+                font-weight: 600;
+            }
+
+            .search__backwards-btn:hover {
+                border: 2px solid rgb(40, 167, 69);
+            }
+
+            .search__details {
+                display: flex;
+                justify-content: center;
+                background-color: white;
+                margin-top: 50px;
+                width: 98%;
+
+                .search__seller-details {
+
+                    padding-left: 10px;
+
+                    .search__details-col {
+
+                        height: 40px;
+                        margin-top: 6px;
+                    }
+                }
+            }
+
+            .search__product-details {
+                display: flex;
+                border-top: 1px solid black;
+                align-items: center;
+                position: relative;
+                background-color: white;
+                padding: 16px 0;
+
+                width: 98%;
+
+
+                .search__details-col {
+                    padding: 0;
+                    max-width: 60%;
+                    margin-right: 10px;
+
+                }
+
+                .search__add-item-btn {
+                    position: absolute;
+                    right: 6px;
+
+                }
+
+            }
+        }
+    }
+}

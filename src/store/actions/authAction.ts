@@ -75,7 +75,7 @@ export const businessSignup = (
           postcode: data.postcode,
           city: data.city,
           street: data.street,
-
+          products: data.products,
         };
 
         await firebase

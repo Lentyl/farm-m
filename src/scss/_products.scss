@@ -1,5 +1,5 @@
-.login {
-    background-image: url('../assets/img/sign-up-background-mobile-460x657-min.jpg');
+.products {
+    background-image: url('../assets/img/products-background-mobile-460x435-min.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -8,30 +8,24 @@
     min-height: 90%;
     flex-grow: 1;
 
-
     @media screen and (min-width: map-get($breakpoins, sm)) {
-        background-image: url('../assets/img/sign-up-background-mobile-800x1143-min.jpg');
+        background-image: url('../assets/img/products-background-mobile-800-757-min.jpg');
     }
 
     @media screen and (min-width: map-get($breakpoins, lg)) {
-        background-image: url('../assets/img/sign-up-background-desktop-1280x720-min.jpg');
+        background-image: url('../assets/img/products-background-desktop-1280x583-min.jpg');
     }
 
     @media screen and (min-width: map-get($breakpoins, xl)) {
-        background-image: url('../assets/img/sign-up-background-desktop-1980x1114-min.jpg');
+        background-image: url('../assets/img/products-background-desktop-1980x1320-min.jpg');
     }
 
-
-    .login__container {
+    .products__container {
         padding: 10px;
         background-color: rgba(255, 255, 255, 0.5);
         margin: 100px auto;
         position: relative;
         width: 90%;
+
     }
-
-}
-
-.login__title {
-    color: rgb(40, 167, 69);
 }

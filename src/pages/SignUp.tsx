@@ -33,7 +33,7 @@ const SignUp: FC = () => {
 
   return (
     <div className="sign-up">
-      {authentication ? (<Container className="login__container" fluid><h2 className='login__title'>Witamy rejestracja powiodła się.</h2></Container>) : (
+      {authentication ? (<Container className="sign-up__container" fluid><h2 className='login__title'>Witamy rejestracja powiodła się.</h2></Container>) : (
         <Container className="sign-up__container" fluid>
           <Form onSubmit={submitHandler}>
             <Form.Row>
@@ -54,18 +54,21 @@ const SignUp: FC = () => {
                 <Form.Control.Feedback>Wygląda dobrze!</Form.Control.Feedback>
               </Form.Group>
             </Form.Row>
-
-            <Form.Group>
-              <Form.Check
-                required
-                label="Zgadzam się na warunki portalu Farm-Market"
-                feedback="Musisz się zgodzić na warunki."
-                onChange={() => { setPermission(!permission) }}
-              />
-            </Form.Group>
-            <Button variant="outline-success" type="submit">
-              {loading ? 'loading...' : 'zatwierdź'}
-            </Button>
+            <Form.Row  >
+              <Form.Group as={Col} sm={10}>
+                <Form.Check
+                  required
+                  label="Zgadzam się na warunki portalu Farm-Market"
+                  feedback="Musisz się zgodzić na warunki."
+                  onChange={() => { setPermission(!permission) }}
+                />
+              </Form.Group>
+              <Form.Group className='sign-up__button-container' as={Col} sm={2}>
+                <Button className='sign-up__button' variant="outline-success" type="submit">
+                  {loading ? 'loading...' : 'zatwierdź'}
+                </Button>
+              </Form.Group>
+            </Form.Row>
           </Form>
         </Container>)}
     </div>

@@ -1,3 +1,9 @@
+
+import { Product, Seller, SellersArr } from './uiData/dataTypes'
+
+
+
+
 export const SET_USER = "SET_USER";
 export const SET_BUSINESS_USER = "SET_BUSINESS_USER";
 export const SIGN_OUT = "SIGN_OUT";
@@ -7,6 +13,7 @@ export const NEED_VERIFICATION = "NEED_VERIFICATION";
 export const SET_SUCCESS = "SET_SUCCESS";
 export const SET_AUTHENTICATION = "SET_AUTHENTICATION";
 
+
 export interface User {
   name: string;
   password: string;
@@ -15,7 +22,7 @@ export interface User {
   postcode?: string;
   city?: string;
   street?: string;
-  products?: Array<{ name: string, price: number, quantity: number }>;
+  products?: Product[];
 }
 
 export interface SignUpData {
@@ -29,6 +36,7 @@ export interface BusinessSignUpData extends SignUpData {
   postcode: string;
   city: string;
   street: string;
+  products: Product[];
 }
 
 export interface LoginData {
@@ -79,4 +87,49 @@ export type AuthAction =
   | SignOutAction
   | SetErrorAction
   | setAuthentication;
+
+
+//Logged Types
+
+export const GET_PRODUCTS = 'GET_PRODUCTS'
+export const GET_SELLER = 'GET_SELLER'
+
+
+export interface initialLoggedState {
+  products: Product[],
+  sellers: SellersArr,
+}
+
+/* export interface SellerData {
+  seller: 
+} */
+
+
+/* export interface ProductData {
+  products: ProductsArr[],
+} */
+
+interface GetProducts {
+  type: typeof GET_PRODUCTS,
+  data: Product[]
+}
+
+interface GetSeller {
+  type: typeof GET_SELLER
+  data: SellersArr
+}
+
+export type LoggedActions =
+  | GetProducts
+  | GetSeller;
+
+
+
+
+
+
+
+
+
+
 

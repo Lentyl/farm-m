@@ -3,11 +3,13 @@ import { Carousel } from "react-bootstrap";
 import potatoes from "../assets/img/potatoes.jpg";
 import carrots from "../assets/img/carrots.jpg";
 import vegetables from "../assets/img/vegetables.jpg";
+import SearchProducts from "../components/SearchProduct";
 
 const mainPage: React.FC = () => {
   return (
-    <div className="main-page">
+    <main className="main-page">
       <div className="main-page__transition"></div>
+      <SearchProducts />
       <div className="main-page__carusel-container">
         <Carousel className="main-page__carusel">
           <Carousel.Item className="main-page__carusel-item">
@@ -47,7 +49,7 @@ const mainPage: React.FC = () => {
           </Carousel.Item>
         </Carousel>
       </div>
-    </div>
+    </main>
   );
 };
 
