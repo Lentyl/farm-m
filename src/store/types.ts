@@ -100,14 +100,6 @@ export interface initialLoggedState {
   sellers: SellersArr,
 }
 
-/* export interface SellerData {
-  seller: 
-} */
-
-
-/* export interface ProductData {
-  products: ProductsArr[],
-} */
 
 interface GetProducts {
   type: typeof GET_PRODUCTS,

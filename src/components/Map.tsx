@@ -3,7 +3,6 @@ import Autocomplete from './Autocomplete';
 import carrot from '../assets/svg/carrot.svg'
 
 
-
 interface IMapProps {
     mapType: google.maps.MapTypeId;
     mapTypeControl?: boolean;
@@ -15,8 +14,6 @@ interface IMarker {
     latitude: number;
     longitude: number;
 }
-
-
 
 type GoogleLatLng = google.maps.LatLng;
 type GoogleLeMap = google.maps.Map;
