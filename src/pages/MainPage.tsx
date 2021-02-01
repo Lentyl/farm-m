@@ -8,8 +8,10 @@ import SearchProducts from "../components/SearchProduct";
 const mainPage: React.FC = () => {
   return (
     <main className="main-page">
+      <div className="main-page__search-container">
+        <SearchProducts />
+      </div>
       <div className="main-page__transition"></div>
-      <SearchProducts />
       <div className="main-page__carusel-container">
         <Carousel className="main-page__carusel">
           <Carousel.Item className="main-page__carusel-item">
@@ -49,6 +51,7 @@ const mainPage: React.FC = () => {
           </Carousel.Item>
         </Carousel>
       </div>
+
     </main>
   );
 };

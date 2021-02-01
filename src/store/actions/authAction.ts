@@ -114,7 +114,7 @@ export const login = (
     try {
       const res = await firebase
         .auth()
-        .signInWithEmailAndPassword(data.email, data.password);
+        .signInWithEmailAndPassword(data.email, data.password)
 
       if (res.operationType === 'signIn') {
         const authentication: boolean = true

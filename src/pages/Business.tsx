@@ -1,4 +1,4 @@
-import React, { FC, FormEvent, useState, useEffect } from "react";
+import React, { FC, FormEvent, useState, useEffect, lazy, Suspense } from "react";
 import { Form, Button, Col, Container } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux"
 import { businessSignup } from "../store/actions/authAction";
@@ -7,9 +7,10 @@ import { loadMapApi } from "../mapUtils/googleMapUtils";
 import { setError } from "../store/actions/authAction";
 import { RootState } from "../store";
 import AddProducts from "../components/AddProducts"
+import { Product, LocationLatLng } from '../store/uiData/dataTypes'
+
 import Map from "../components/Map"
 
-import { Product } from '../store/uiData/dataTypes'
 
 
 const Business: FC = () => {
@@ -21,6 +22,7 @@ const Business: FC = () => {
   const [street, setStreet] = useState<string>("");
   const [permission, setPermission] = useState<boolean>(false);
   const [products, setProducts] = useState<Product[]>([]);
+  const [locationLatLng, setlocationLatLng] = useState<LocationLatLng>();
 
 
 
@@ -28,17 +30,9 @@ const Business: FC = () => {
   const dispatch = useDispatch();
 
   const { authentication, error } = useSelector((state: RootState) => state.auth);
+  const { mapLoaded } = useSelector((state: RootState) => state.logged);
 
-  const [scriptLoaded, setScriptLoaded] = useState(false)
 
-  useEffect(() => {
-
-    const googleMapScript = loadMapApi();
-    googleMapScript.addEventListener('load', () => {
-      setScriptLoaded(true)
-    })
-
-  }, [])
 
 
   useEffect(() => {
@@ -64,10 +58,16 @@ const Business: FC = () => {
   }
 
 
-  const getMapAddress = (street: string, town: string, postecode: string): void => {
-    setPostcode(postecode);
-    setCity(town)
-    setStreet(street)
+  const getMapAddress = (street: string, town: string, postecode: string, locationLatLng?: LocationLatLng): void => {
+    // console.log('locationLatLng', locationLatLng);
+    if (street || town || postcode) {
+      setPostcode(postecode);
+      setCity(town)
+      setStreet(street)
+    }
+
+    setlocationLatLng(locationLatLng);
+
   }
 
   const getProducts = (products: Product[]): void => {
@@ -85,9 +85,8 @@ const Business: FC = () => {
       )
         :
         (
-
           <Container className="sign-up__container" fluid>
-            {scriptLoaded && <Map mapType={google.maps.MapTypeId.ROADMAP} mapTypeControl={true} getMapAddress={getMapAddress} />}
+            {mapLoaded && <Map mapType={google.maps.MapTypeId.ROADMAP} mapTypeControl={true} getMapAddress={getMapAddress} />}
             <Form onSubmit={submitHandler}>
               <Form.Row>
                 <Form.Group as={Col} md="4" controlId="validationCustom01">

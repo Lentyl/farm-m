@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
+import { Link as LinkB } from "react-router-dom";
 import * as firebase from "firebase";
 import {
   Navbar,
@@ -17,12 +18,12 @@ import { FaShoppingCart } from "react-icons/fa";
 import { GiCarrot } from "react-icons/gi";
 
 const Header: React.FC = () => {
-  const [cartItemCounter, setCartItemCounter] = useState(2);
   const [searchValue, setSearchValue] = useState('')
   const [serch, setSerch] = useState(false)
 
   let { authentication } = useSelector((state: RootState) => state.auth);
   const { user } = useSelector((state: RootState) => state.auth);
+  const { cartAmount } = useSelector((state: RootState) => state.logged);
 
 
   const dispatch = useDispatch();
@@ -71,26 +72,30 @@ const Header: React.FC = () => {
         bg="dark"
         variant="dark"
       >
-        <Navbar.Brand className="header__logo" href="/">
-          <GiCarrot className="header__logo-icon" />
-          <div className="header__logo-inscription">Farm-Market</div>
+        <Navbar.Brand className="header__logo">
+          <LinkB to="/">
+            <GiCarrot className="header__logo-icon" />
+          </LinkB>
+          <LinkB className="header__logo-inscription" to="/">
+            Farm-Market
+          </LinkB>
         </Navbar.Brand>
         <Navbar.Toggle
           className="sign-up__container"
           aria-controls="responsive-navbar-nav"
         />
         <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className="mr-auto">
+          <Nav className="header__log-container mr-auto">
             {authentication ? (<Button className="header__signout-btn" variant="outline-danger" size='sm' onClick={logoutHandler}>
               Wyloguj się</Button>) : (<NavDropdown
                 title="Logowanie/rejestracja"
                 id="collasible-nav-dropdown"
               >
-                <NavDropdown.Item href="/login">Logowanie</NavDropdown.Item>
-                <NavDropdown.Item href="/sign-up">Rejestracja</NavDropdown.Item>
+                <NavDropdown.Item className="header__dropdown-item"><LinkB className="header__link-dropdown" to="/login" >Logowanie </LinkB></NavDropdown.Item>
+                <NavDropdown.Item className="header__dropdown-item"><LinkB className="header__link-dropdown" to="/sign-up">Rejestracja </LinkB></NavDropdown.Item>
               </NavDropdown>)}
-            <Nav.Link href="/products">Kupujesz</Nav.Link>
-            {authentication ? (<Nav.Link href="/user">Panel</Nav.Link>) : (<Nav.Link href="/business-sign-up">Sprzedajesz</Nav.Link>)}
+            <LinkB className="header__link" to="/products">Kupujesz</LinkB>
+            {authentication ? (<LinkB className="header__link" to="/user">Panel</LinkB>) : (<LinkB className="header__link" to="/business-sign-up">Sprzedajesz</LinkB>)}
           </Nav>
 
           {serch && <Form className="header__search-form" onSubmit={submitHandler} inline>
@@ -110,10 +115,10 @@ const Header: React.FC = () => {
 
 
           <Nav className="header__cart-container">
-            <Nav.Link className="header__cart-link" href="/cart">
+            <LinkB className="header__cart-link" to="/cart">
               <FaShoppingCart className="header__cart-icon" />
-              <div className="header__cart-item-counter">{cartItemCounter}</div>
-            </Nav.Link>
+              <div className="header__cart-item-counter">{cartAmount}</div>
+            </LinkB>
           </Nav>
         </Navbar.Collapse>
 

@@ -1,12 +1,14 @@
 import React, { FC, useRef, useState, useEffect } from 'react'
 import Autocomplete from './Autocomplete';
 import carrot from '../assets/svg/carrot.svg'
+import { LocationLatLng } from '../store/uiData/dataTypes'
 
 
 interface IMapProps {
+    LocationLatLng?: LocationLatLng
     mapType: google.maps.MapTypeId;
     mapTypeControl?: boolean;
-    getMapAddress: (street: string, town: string, postecode: string) => void | undefined;
+    getMapAddress?: (street: string, town: string, postecode: string, locationLatLng?: LocationLatLng) => void | undefined;
 }
 
 interface IMarker {
@@ -20,7 +22,7 @@ type GoogleLeMap = google.maps.Map;
 type GoogleMarker = google.maps.Marker;
 
 
-const Map: FC<IMapProps> = ({ mapType, mapTypeControl = false, getMapAddress }) => {
+const Map: FC<IMapProps> = ({ mapType, mapTypeControl = false, getMapAddress, LocationLatLng }) => {
     const ref = useRef<HTMLDivElement>(null)
 
     const [map, setMap] = useState<GoogleLeMap>()
@@ -48,7 +50,10 @@ const Map: FC<IMapProps> = ({ mapType, mapTypeControl = false, getMapAddress }) 
         if (map) {
             google.maps.event.addListener(map, 'click', function (e) {
 
-                coordinateToAddress(e.latLng);
+                if (mapTypeControl) {
+                    coordinateToAddress(e.latLng);
+                }
+
             })
         }
     };
@@ -69,8 +74,12 @@ const Map: FC<IMapProps> = ({ mapType, mapTypeControl = false, getMapAddress }) 
                 const postecode = addressArr[1].slice(0, 6)
                 const town = addressArr[1].slice(6)
 
-                getMapAddress(street, town, postecode);
+                const locationLatLng: LocationLatLng = {
+                    lat: coordinate.lat(),
+                    lng: coordinate.lng(),
+                }
 
+                getMapAddress!(street, town, postecode, locationLatLng);
 
 
                 setMarker({
@@ -84,6 +93,7 @@ const Map: FC<IMapProps> = ({ mapType, mapTypeControl = false, getMapAddress }) 
 
     const addSingleMarker = (): void => {
         if (marker) {
+
             addMarker(new google.maps.LatLng(marker.latitude, marker.longitude));
         }
     }
@@ -100,14 +110,13 @@ const Map: FC<IMapProps> = ({ mapType, mapTypeControl = false, getMapAddress }) 
                 position: location,
                 animation: google.maps.Animation.DROP,
                 map: map,
-                draggable: true,
+                draggable: false,
                 icon: getIconAttribute()
             })
 
             setMarkerG(marker);
             setMarkerCreated(true);
             if (typedAddress) {
-                console.log('address typed');
                 map!.setCenter(location)
             }
 
@@ -117,7 +126,6 @@ const Map: FC<IMapProps> = ({ mapType, mapTypeControl = false, getMapAddress }) 
             map!.setCenter(location)
 
             if (typedAddress) {
-                console.log('address typed');
                 map!.setCenter(location)
             }
 
@@ -143,6 +151,8 @@ const Map: FC<IMapProps> = ({ mapType, mapTypeControl = false, getMapAddress }) 
 
 
     const initMap = (zoomLevel: number, address: GoogleLatLng): void => {
+
+
         if (ref.current) {
             setMap(
                 new google.maps.Map(ref.current, {
@@ -155,15 +165,37 @@ const Map: FC<IMapProps> = ({ mapType, mapTypeControl = false, getMapAddress }) 
                 })
             )
         }
+
+        if (mapTypeControl === false) {
+            console.log('add single marker');
+            const marker = {
+                address: 'Płońsk',
+                latitude: LocationLatLng!.lat,
+                longitude: LocationLatLng!.lng
+            }
+
+            setMarker(marker);
+
+        }
     }
 
 
-    return (
-        <div className="map">
-            <div ref={ref} className='map__container' />
-            <Autocomplete getMapAddress={getMapAddress} addMarker={addMarker} />
-        </div>
-    )
+    if (mapTypeControl) {
+
+        return (
+            <div className="map">
+                <div ref={ref} className='map__container' />
+                <Autocomplete getMapAddress={getMapAddress!} addMarker={addMarker} />
+            </div>
+        )
+    } else {
+        return (
+            <div className="map">
+                <div ref={ref} className='map__container' />
+            </div>
+        )
+    }
+
 }
 
 export default Map

@@ -1,8 +1,8 @@
 import { ThunkAction } from "redux-thunk";
 import firebase from "../../firebase/config";
-import { LoggedActions, GET_PRODUCTS, GET_SELLER } from "../types";
+import { LoggedActions, GET_PRODUCTS, GET_SELLER, SET_CART_AMOUNT, SET_ORDER, MAP_LOADED, ADD_EXTRA_PRODUCT } from "../types";
 import { RootState } from "..";
-import { Seller } from "../uiData/dataTypes";
+import { Order, Seller, ExtraProduct } from "../uiData/dataTypes";
 
 
 
@@ -23,8 +23,7 @@ export const getProducts = (
 
                         const sellers = doc.data()
 
-                        // console.log('users ', doc.data());
-                        //console.log(products);
+                        const location = { lat: 44.5, lng: 60.4 }
 
                         const sellerArr: Seller = {
                             id: sellers.name,
@@ -33,6 +32,7 @@ export const getProducts = (
                             city: sellers.city,
                             street: sellers.street,
                             email: sellers.email,
+                            location: location,
                             products: sellers.products,
                             searchedProduct: searchValue,
                         }
@@ -50,5 +50,53 @@ export const getProducts = (
             console.log(err);
         }
 
+    }
+}
+
+/* export const setCartAmount = (
+    cartAmount: number
+): ThunkAction<void, RootState, null, LoggedActions> => {
+    return (dispatch) => {
+
+        dispatch({
+            type: SET_CART_AMOUNT,
+            data: cartAmount,
+        })
+    }
+} */
+export const setOrder = (
+    order: Order
+): ThunkAction<void, RootState, null, LoggedActions> => {
+    return (dispatch) => {
+
+        dispatch({
+            type: SET_ORDER,
+            data: order,
+        })
+    }
+}
+export const addExtraProduct = (
+    product: ExtraProduct
+): ThunkAction<void, RootState, null, LoggedActions> => {
+    return (dispatch) => {
+
+        
+        dispatch({
+            type: ADD_EXTRA_PRODUCT,
+            data: product,
+        })
+    }
+}
+
+export const setMapLoaded = (
+    mapLoaded: boolean
+): ThunkAction<void, RootState, null, LoggedActions> => {
+
+    return (dispatch) => {
+
+        dispatch({
+            type: MAP_LOADED,
+            data: mapLoaded,
+        })
     }
 }

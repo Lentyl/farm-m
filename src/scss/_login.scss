@@ -4,10 +4,9 @@
     background-position: center;
     background-repeat: no-repeat;
     position: absolute;
+    top: 0;
     width: 100%;
-    min-height: 90%;
-    flex-grow: 1;
-
+    height: 100%;
 
     @media screen and (min-width: map-get($breakpoins, sm)) {
         background-image: url('../assets/img/sign-up-background-mobile-800x1143-min.jpg');
@@ -23,9 +22,10 @@
 
 
     .login__container {
+
         padding: 10px;
         background-color: rgba(255, 255, 255, 0.5);
-        margin: 100px auto;
+        margin: 250px auto;
         position: relative;
         width: 90%;
     }

@@ -3,12 +3,13 @@ import PlacesAutocomplete, {
     geocodeByAddress,
     getLatLng,
 } from 'react-places-autocomplete';
+import { LocationLatLng } from '../store/uiData/dataTypes'
 
 
 type GoogleLatLng = google.maps.LatLng;
 
 interface IAutocompleteProps {
-    getMapAddress: (street: string, town: string, postecode: string) => void | undefined;
+    getMapAddress?: (street: string, town: string, postecode: string, locationLatLng?: LocationLatLng) => void | undefined,
     addMarker: (location: GoogleLatLng, typedAddress: boolean) => void | undefined
 }
 
@@ -20,6 +21,7 @@ const Autocomplete: FC<IAutocompleteProps> = ({ getMapAddress, addMarker }) => {
     const [location, setLocation] = useState<string>('')
 
 
+
     const handlechange = (value: string): void => {
         setLocation(value)
     }
@@ -28,11 +30,22 @@ const Autocomplete: FC<IAutocompleteProps> = ({ getMapAddress, addMarker }) => {
         geocodeByAddress(location)
             .then(results => {
 
-
                 getLatLng(results[0])
+
                     .then(latLng => {
+                        const locationLatLng = {
+                            lat: latLng.lat,
+                            lng: latLng.lng
+                        }
+
+                        getMapAddress!('', '', '', locationLatLng);
+
+
                         addMarker(new google.maps.LatLng(latLng.lat, latLng.lng), true)
                     })
+
+
+
 
                 const addressArr = results[0].formatted_address.split(', ');
                 addressArr.pop();
@@ -43,19 +56,21 @@ const Autocomplete: FC<IAutocompleteProps> = ({ getMapAddress, addMarker }) => {
                 const isDigid = re.test(firstMark);
 
                 if (addressArr.length < 2 && isDigid === false) {
-                    getMapAddress('', firstAddressPart, '');
+
+
+                    getMapAddress!('', firstAddressPart, '');
                 } else if (addressArr.length < 2 && isDigid === true) {
                     const addressArray = addressArr[0].split(' ');
                     const postecode = addressArray[0];
                     const town = addressArray[1]
-                    getMapAddress('', town, postecode);
+                    getMapAddress!('', town, postecode);
 
                 } else {
 
                     const addressArray = addressArr[1].split(' ');
                     const postecode = addressArray[0];
                     const town = addressArray[1]
-                    getMapAddress(firstAddressPart, town, postecode);
+                    getMapAddress!(firstAddressPart, town, postecode);
 
                 }
 

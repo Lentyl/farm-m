@@ -1,16 +1,20 @@
 import React, { FC } from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, } from "react-router-dom";
 import MainPage from "./MainPage";
 import Login from "./Login";
 import SignUp from "./SignUp";
 import Business from "./Business";
-import User from "./User"
-import Products from './Products'
+import User from "./User";
+import Products from './Products';
+import Cart from "./Cart";
+
+
 
 
 const Pages: FC = () => {
   return (
     <div className="pages">
+
       <Switch>
         <Route path="/" exact component={MainPage} />
         <Route path="/login" exact component={Login} />
@@ -18,6 +22,7 @@ const Pages: FC = () => {
         <Route path="/business-sign-up" exact component={Business} />
         <Route path="/user" exact component={User} />
         <Route path="/products" exact component={Products} />
+        <Route path="/cart" exact component={Cart} />
       </Switch>
     </div>
   );

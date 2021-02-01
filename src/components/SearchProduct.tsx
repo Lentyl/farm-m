@@ -3,16 +3,27 @@ import { Container, ListGroup, Button, Row, Col } from "react-bootstrap";
 import { SellersArr, Order } from '../store/uiData/dataTypes';
 import { RootState } from "../store";
 import { FaShoppingCart } from "react-icons/fa";
+import Map from '../components/Map';
+import { loadMapApi } from "../mapUtils/googleMapUtils";
+
 import { useDispatch, useSelector } from "react-redux"
+import { setOrder } from "../store/actions/loggedActions"
+
+
+
 
 const SearchProduct: FC = () => {
     const [sellersArr, setSellersArr] = useState<SellersArr>([]);
     const [dysplayDetails, setDysplayDetails] = useState(false);
     const [chosenSeller, setChosenSeller] = useState(0)
-    const [order, setOrder] = useState<Order[]>([])
+    const [scriptLoaded, setScriptLoaded] = useState(false)
 
     let { sellers } = useSelector((state: RootState) => state.logged);
+    let { order } = useSelector((state: RootState) => state.logged);
     let { authentication } = useSelector((state: RootState) => state.auth);
+    const dispatch = useDispatch();
+
+    const { mapLoaded } = useSelector((state: RootState) => state.logged);
 
     useEffect(() => {
 
@@ -22,6 +33,7 @@ const SearchProduct: FC = () => {
             email: "mialczyk64@wp.pl",
             name: "Miałczyk",
             postcode: "09-100",
+            location: { lat: 52.63, lng: 20.36 },
             products: [{
                 name: "jabłka",
                 price: 50,
@@ -36,8 +48,9 @@ const SearchProduct: FC = () => {
             searchedProduct: "jabłka",
             street: "Wolności 2",
         },]
-        console.log(sellers);
+
         setSellersArr(sellers);
+
     }, [])
 
     const clickBackwardsHandler = (): void => {
@@ -49,10 +62,17 @@ const SearchProduct: FC = () => {
         setChosenSeller(i)
     }
 
-    const clickAddToCartHandler = (sellerId: string, productName: string, productPrice: number): void => {
+    const clickAddToCartHandler = (productName: string, productPrice: number, productCapacity: number, sellerId: string): void => {
 
-        const orderUser: Order[] = [{ sellerId, productName, productPrice }, ...order]
-        setOrder(orderUser)
+        const productQuantity: number = 1;
+        dispatch(setOrder({
+            productName,
+            productPrice,
+            productQuantity,
+            productCapacity,
+            sellerId
+        }))
+
     }
 
     return (
@@ -63,12 +83,12 @@ const SearchProduct: FC = () => {
                         {sellersArr.map((seller, i) => (
                             < ListGroup.Item key={i} className='search__list-item'>
                                 {
-                                    seller.products.map(product => {
+                                    seller.products.map((product, i) => {
                                         if (product.name === seller.searchedProduct) {
 
                                             return (
 
-                                                <p>nazwa: {product.name},  cena: {product.price} zł, waga opakowania: {product.capacity} kg</p>
+                                                <p key={i} className="search__list-item-paragraph">nazwa: {product.name},  cena: {product.price} zł, waga opakowania: {product.capacity} kg</p>
 
                                             )
                                         }
@@ -93,22 +113,23 @@ const SearchProduct: FC = () => {
                                     <Col className='search__details-col' md='auto'>e-mail: {sellersArr[chosenSeller].email}</Col>
                                 </Row>
                                 <Row className="search__product-details">wszystkie produkty sprzedawcy o imieniu: {sellersArr[chosenSeller].name}</Row>
-                                {sellersArr[chosenSeller].products.map(product => (
-                                    <Row className="search__product-details" >
+                                {sellersArr[chosenSeller].products.map((product, i) => (
+                                    <Row key={i} className="search__product-details" >
                                         <Col className='search__details-col' md='auto'>produkt: {product.name}</Col>
                                         <Col className='search__details-col' md='auto'>cena: {product.price} zł</Col>
                                         <Col className='search__details-col' md='auto'>waga opakowania: {product.capacity} kg</Col>
-                                        <Button className="search__add-item-btn" onClick={() => { clickAddToCartHandler(sellersArr[chosenSeller].id, product.name, product.price) }} variant="outline-success">
+                                        <Button className="search__add-item-btn" onClick={() => { clickAddToCartHandler(product.name, product.price, product.capacity, sellersArr[chosenSeller].id) }} variant="outline-success">
                                             <FaShoppingCart />  dodaj do koszyka
                                         </Button>
                                     </Row>
                                 ))}
-
                             </Row>
+                            <div className="search__map-container">
+                                {mapLoaded && <Map mapType={google.maps.MapTypeId.ROADMAP} LocationLatLng={sellersArr[chosenSeller].location} />}
+                            </div>
                         </div>
                 }
             </Container>
-
         </div>
     )
 }

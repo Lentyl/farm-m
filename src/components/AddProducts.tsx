@@ -1,5 +1,4 @@
 import React, { FC, useState } from 'react'
-import NumericInput from "react-numeric-input";
 import { Product } from '../store/uiData/dataTypes'
 import { Form, Button, Col, Container, Row } from "react-bootstrap";
 

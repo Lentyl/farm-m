@@ -1,5 +1,5 @@
 
-import { Product, Seller, SellersArr } from './uiData/dataTypes'
+import { Order, Product, Seller, SellersArr, ExtraProduct } from './uiData/dataTypes'
 
 
 
@@ -93,11 +93,19 @@ export type AuthAction =
 
 export const GET_PRODUCTS = 'GET_PRODUCTS'
 export const GET_SELLER = 'GET_SELLER'
+export const SET_CART_AMOUNT = 'SET_CART_AMOUNT'
+export const SET_ORDER = 'SET_ORDER'
+export const MAP_LOADED = 'MAP_LOADED'
+export const ADD_EXTRA_PRODUCT = 'ADD_EXTRA_PRODUCT'
 
 
 export interface initialLoggedState {
   products: Product[],
   sellers: SellersArr,
+  cartAmount: number,
+  order: Order[],
+  mapLoaded: boolean,
+
 }
 
 
@@ -107,13 +115,35 @@ interface GetProducts {
 }
 
 interface GetSeller {
-  type: typeof GET_SELLER
+  type: typeof GET_SELLER,
   data: SellersArr
+}
+
+interface SetCartAmount {
+  type: typeof SET_CART_AMOUNT,
+  data: number
+}
+interface SetOrder {
+  type: typeof SET_ORDER,
+  data: Order
+}
+interface MapLoaded {
+  type: typeof MAP_LOADED
+  data: boolean
+}
+
+interface AddExtraProduct {
+  type: typeof ADD_EXTRA_PRODUCT
+  data: ExtraProduct
 }
 
 export type LoggedActions =
   | GetProducts
-  | GetSeller;
+  | GetSeller
+  | SetCartAmount
+  | SetOrder
+  | MapLoaded
+  | AddExtraProduct
 
 
 
