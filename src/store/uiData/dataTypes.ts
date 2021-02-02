@@ -41,4 +41,3 @@ export interface Order {
     sellerId: string,
 }
 
-export type ExtraProduct = string ; 

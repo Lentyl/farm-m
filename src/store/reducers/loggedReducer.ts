@@ -1,6 +1,6 @@
 import { stat } from 'fs';
 import Products from '../../pages/Products';
-import { GET_PRODUCTS, GET_SELLER, initialLoggedState, LoggedActions, SET_CART_AMOUNT, SET_ORDER, MAP_LOADED, ADD_EXTRA_PRODUCT } from '../types'
+import { GET_PRODUCTS, GET_SELLER, initialLoggedState, LoggedActions, SET_CART_AMOUNT, SET_ORDER, MAP_LOADED, ADD_EXTRA_PRODUCT, DELETE_PRODUCT } from '../types'
 import { Order } from '../uiData/dataTypes';
 
 
@@ -70,15 +70,28 @@ export default (state = initialState, action: LoggedActions): initialLoggedState
             }
         case ADD_EXTRA_PRODUCT:
 
-        console.log(action.data);
+            const order: Order[] =  state.order.map(product=>{ 
+                if(product.productName===action.data) 
+                product.productQuantity++
+
+                return product
+            })
 
             return {
                 ...state,
-                order: state.order,
-
+                order: order,
             }
 
+        case DELETE_PRODUCT:
 
+        
+            const afterDeleting:Order[] = state.order.filter(product => product.productName !== action.data);
+
+            console.log(afterDeleting);
+            return {
+                ...state,
+                order: afterDeleting
+            }
 
         case MAP_LOADED:
             return {

@@ -1,5 +1,5 @@
 
-import { Order, Product, Seller, SellersArr, ExtraProduct } from './uiData/dataTypes'
+import { Order, Product, Seller, SellersArr } from './uiData/dataTypes'
 
 
 
@@ -12,6 +12,7 @@ export const SET_ERROR = "SET_ERROR";
 export const NEED_VERIFICATION = "NEED_VERIFICATION";
 export const SET_SUCCESS = "SET_SUCCESS";
 export const SET_AUTHENTICATION = "SET_AUTHENTICATION";
+export const DELETE_PRODUCT = "DELETE_PRODUCT";
 
 
 export interface User {
@@ -134,7 +135,11 @@ interface MapLoaded {
 
 interface AddExtraProduct {
   type: typeof ADD_EXTRA_PRODUCT
-  data: ExtraProduct
+  data: string
+}
+interface DeleteProduct {
+  type: typeof DELETE_PRODUCT
+  data: string
 }
 
 export type LoggedActions =
@@ -144,6 +149,7 @@ export type LoggedActions =
   | SetOrder
   | MapLoaded
   | AddExtraProduct
+  | DeleteProduct
 
 
 

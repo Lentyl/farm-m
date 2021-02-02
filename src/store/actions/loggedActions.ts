@@ -1,8 +1,8 @@
 import { ThunkAction } from "redux-thunk";
 import firebase from "../../firebase/config";
-import { LoggedActions, GET_PRODUCTS, GET_SELLER, SET_CART_AMOUNT, SET_ORDER, MAP_LOADED, ADD_EXTRA_PRODUCT } from "../types";
+import { LoggedActions, GET_PRODUCTS, GET_SELLER, SET_CART_AMOUNT, SET_ORDER, MAP_LOADED, ADD_EXTRA_PRODUCT, DELETE_PRODUCT } from "../types";
 import { RootState } from "..";
-import { Order, Seller, ExtraProduct } from "../uiData/dataTypes";
+import { Order, Seller } from "../uiData/dataTypes";
 
 
 
@@ -76,13 +76,21 @@ export const setOrder = (
     }
 }
 export const addExtraProduct = (
-    product: ExtraProduct
+    product: string
 ): ThunkAction<void, RootState, null, LoggedActions> => {
     return (dispatch) => {
-
-        
         dispatch({
             type: ADD_EXTRA_PRODUCT,
+            data: product,
+        })
+    }
+}
+export const deleteProduct = (
+    product: string
+): ThunkAction<void, RootState, null, LoggedActions> => {
+    return (dispatch) => {
+        dispatch({
+            type: DELETE_PRODUCT,
             data: product,
         })
     }
