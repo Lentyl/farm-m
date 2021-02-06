@@ -22,6 +22,7 @@ export const signup = (
           password: data.password,
           email: data.email,
           id: res.user.uid,
+          businessStatus: 'private'
         };
         await firebase
           .firestore()
@@ -76,11 +77,13 @@ export const businessSignup = (
           city: data.city,
           street: data.street,
           products: data.products,
+          businessStatus: 'business'
+
         };
 
         await firebase
           .firestore()
-          .collection("/business")
+          .collection("/users")
           .doc(res.user.uid)
           .set(userData);
 
@@ -119,6 +122,7 @@ export const login = (
       if (res.operationType === 'signIn') {
         const authentication: boolean = true
         dispatch(authenticationSetup({ authentication }));
+        dispatch(setUser(res.user!.uid))
       }
 
     } catch (err) {
@@ -167,3 +171,45 @@ export const authenticationSetup = (
     })
   }
 }
+
+export const setUser = (
+    uid:string
+): ThunkAction<void, RootState, null, AuthAction> => {
+  return async (dispatch) => {
+
+    try {
+
+       await firebase
+      .firestore()
+      .collection('users')
+      .where('id', '==', uid)
+      .get()
+      .then(snapshot => {
+        snapshot.docs.map(doc => {
+          
+          const userDb = doc.data()
+
+         const user:User = {
+           id: userDb.id,
+           name: userDb.name,
+           email: userDb.email,
+           postcode: userDb.postcode,
+           city: userDb.city,
+           street: userDb.street
+         }
+
+          dispatch({
+            type: SET_USER,
+            data: user,
+          })
+        })
+
+      })
+    }catch (err) {
+      console.log(err);
+      dispatch(setError(err.message));
+    } 
+
+  }
+}
+

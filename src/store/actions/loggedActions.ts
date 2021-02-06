@@ -2,7 +2,7 @@ import { ThunkAction } from "redux-thunk";
 import firebase from "../../firebase/config";
 import { LoggedActions, GET_PRODUCTS, GET_SELLER, SET_CART_AMOUNT, SET_ORDER, MAP_LOADED, ADD_EXTRA_PRODUCT, DELETE_PRODUCT } from "../types";
 import { RootState } from "..";
-import { Order, Seller } from "../uiData/dataTypes";
+import { Order, Seller, FullOrder } from "../uiData/dataTypes";
 
 
 
@@ -15,7 +15,7 @@ export const getProducts = (
 
             await firebase
                 .firestore()
-                .collection("business")
+                .collection("users")
                 .where('productType', 'array-contains', searchValue)
                 .get()
                 .then(snapshot => {
@@ -88,6 +88,8 @@ export const addExtraProduct = (
 export const deleteProduct = (
     product: string
 ): ThunkAction<void, RootState, null, LoggedActions> => {
+
+    
     return (dispatch) => {
         dispatch({
             type: DELETE_PRODUCT,
@@ -95,6 +97,28 @@ export const deleteProduct = (
         })
     }
 }
+
+export const makeOrder = (
+    order: FullOrder
+): ThunkAction<void, RootState, null, LoggedActions> => {
+
+    console.log(order);
+
+    return async () => {
+        try {
+                await firebase
+                .firestore()
+                .collection("orders")
+                .doc('1')
+                .set(order)
+
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+}
+
 
 export const setMapLoaded = (
     mapLoaded: boolean

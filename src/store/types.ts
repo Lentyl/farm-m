@@ -17,13 +17,14 @@ export const DELETE_PRODUCT = "DELETE_PRODUCT";
 
 export interface User {
   name: string;
-  password: string;
   email: string;
   id: string;
+  password?: string;
   postcode?: string;
   city?: string;
   street?: string;
   products?: Product[];
+  businessStatus?: string;
 }
 
 export interface SignUpData {
@@ -128,6 +129,9 @@ interface SetOrder {
   type: typeof SET_ORDER,
   data: Order
 }
+
+
+
 interface MapLoaded {
   type: typeof MAP_LOADED
   data: boolean

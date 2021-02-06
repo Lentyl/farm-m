@@ -39,5 +39,11 @@ export interface Order {
     productQuantity: number,
     productCapacity: number,
     sellerId: string,
+    
+}
+
+export interface FullOrder {
+    buyerId: string,
+    merchandise: Order[]
 }
 

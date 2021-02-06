@@ -84,13 +84,18 @@ export default (state = initialState, action: LoggedActions): initialLoggedState
 
         case DELETE_PRODUCT:
 
-        
             const afterDeleting:Order[] = state.order.filter(product => product.productName !== action.data);
 
-            console.log(afterDeleting);
+            let amountAfterDeleting: number = 0
+            afterDeleting.forEach(item=>{ 
+                amountAfterDeleting += item.productQuantity
+            })
+    
             return {
                 ...state,
-                order: afterDeleting
+                order: afterDeleting,
+                cartAmount: amountAfterDeleting,
+                
             }
 
         case MAP_LOADED:
