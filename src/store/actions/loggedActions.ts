@@ -1,6 +1,6 @@
 import { ThunkAction } from "redux-thunk";
 import firebase from "../../firebase/config";
-import { LoggedActions, GET_PRODUCTS, GET_SELLER, SET_CART_AMOUNT, SET_ORDER, MAP_LOADED, ADD_EXTRA_PRODUCT, DELETE_PRODUCT } from "../types";
+import { LoggedActions, SET_LOADING, GET_PRODUCTS, GET_SELLER, SET_CART_AMOUNT, SET_ORDER, MAP_LOADED, ADD_EXTRA_PRODUCT, DELETE_PRODUCT } from "../types";
 import { RootState } from "..";
 import { Order, Seller, FullOrder } from "../uiData/dataTypes";
 
@@ -102,22 +102,34 @@ export const makeOrder = (
     order: FullOrder
 ): ThunkAction<void, RootState, null, LoggedActions> => {
 
-    console.log(order);
-
-    return async () => {
+    return async (dispatch) => {
         try {
-                await firebase
+             await firebase
                 .firestore()
                 .collection("orders")
-                .doc('1')
+                .doc(new Date().toISOString().substring(1, 19).replace('T',' t '))
                 .set(order)
-
+                .then(()=>{
+                    dispatch(setLoading(false))
+                })
+            
         } catch (err) {
             console.log(err);
         }
     }
 
 }
+
+export const setLoading = (
+    value: boolean
+  ): ThunkAction<void, RootState, null, LoggedActions> => {
+    return (dispatch) => {
+      dispatch({
+        type: SET_LOADING,
+        data: value,
+      });
+    };
+  };
 
 
 export const setMapLoaded = (

@@ -9,10 +9,11 @@ import {
   Form,
   FormControl,
   Button,
+  Spinner,
 } from "react-bootstrap";
 import { RootState } from "../store";
 import { useDispatch, useSelector } from "react-redux";
-import { getProducts } from "../store/actions/loggedActions";
+import { getProducts, setLoading } from "../store/actions/loggedActions";
 import {
   signout,
   authenticationSetup,
@@ -24,21 +25,16 @@ import { GiCarrot } from "react-icons/gi";
 const Header: React.FC = () => {
   const [searchValue, setSearchValue] = useState("");
   const [serch, setSerch] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   let { authentication } = useSelector((state: RootState) => state.auth);
-  const { user } = useSelector((state: RootState) => state.auth);
   const { cartAmount } = useSelector((state: RootState) => state.logged);
 
   const dispatch = useDispatch();
 
-  const logoutHandler = (): void => {
-    dispatch(signout());
-  };
-
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
       authentication = !!user;
-      console.log(user!.uid);
       dispatch(authenticationSetup({ authentication }));
       dispatch(setUser(user!.uid));
     });
@@ -50,13 +46,21 @@ const Header: React.FC = () => {
     }
   }, []);
 
+  const logoutHandler = (): void => {
+    setLoading(true);
+    dispatch(signout());
+  };
+
   const submitHandler = (e: React.FormEvent) => {
     e.preventDefault();
     const search = searchValue.toLowerCase();
     dispatch(getProducts(search));
-
     setSearchValue("");
   };
+
+  useEffect(() => {
+    if (!authentication) setLoading(false);
+  }, [authentication]);
 
   return (
     <header className="header">
@@ -88,7 +92,11 @@ const Header: React.FC = () => {
                 size="sm"
                 onClick={logoutHandler}
               >
-                Wyloguj się
+                {loading && authentication ? (
+                  <Spinner animation="border" variant="primary" size="sm" />
+                ) : (
+                  "Wyloguj się"
+                )}
               </Button>
             ) : (
               <NavDropdown
@@ -97,17 +105,22 @@ const Header: React.FC = () => {
               >
                 <NavDropdown.Item className="header__dropdown-item">
                   <LinkB className="header__link-dropdown" to="/login">
-                    Logowanie{" "}
+                    Logowanie
                   </LinkB>
                 </NavDropdown.Item>
                 <NavDropdown.Item className="header__dropdown-item">
                   <LinkB className="header__link-dropdown" to="/sign-up">
-                    Rejestracja{" "}
+                    Rejestracja
                   </LinkB>
                 </NavDropdown.Item>
               </NavDropdown>
             )}
-            <LinkB className="header__link" to="/products">
+            <LinkB
+              className={`header__link ${
+                !authentication && "header__loged-link"
+              }`}
+              to="/products"
+            >
               Kupujesz
             </LinkB>
             {authentication ? (
@@ -115,7 +128,12 @@ const Header: React.FC = () => {
                 Panel
               </LinkB>
             ) : (
-              <LinkB className="header__link" to="/business-sign-up">
+              <LinkB
+                className={`header__link ${
+                  !authentication && "header__loged-link"
+                }`}
+                to="/business-sign-up"
+              >
                 Sprzedajesz
               </LinkB>
             )}

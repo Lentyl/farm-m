@@ -47,3 +47,12 @@ export interface FullOrder {
     merchandise: Order[]
 }
 
+export interface AlertType {
+    type: 'primary' 
+    | 'success' 
+    | 'danger' 
+    | 'info',
+    heading: string,
+    msg?: string
+}
+

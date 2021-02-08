@@ -1,7 +1,7 @@
 
 import { ThunkAction } from "redux-thunk";
-import { AuthAction, SET_AUTHENTICATION, SET_USER, SET_BUSINESS_USER, SET_ERROR, SIGN_OUT, SignUpData, BusinessSignUpData, LoginData, User, AuthenticationData } from "../types";
-
+import { AuthAction, SET_AUTHENTICATION, SET_USER, SET_BUSINESS_USER, SET_ERROR, SIGN_OUT, SignUpData, BusinessSignUpData, LoginData, User, AuthenticationData, SET_LOADING } from "../types";
+import {setLoading} from './loggedActions'
 import { RootState } from "..";
 import firebase from "../../firebase/config";
 
@@ -123,6 +123,8 @@ export const login = (
         const authentication: boolean = true
         dispatch(authenticationSetup({ authentication }));
         dispatch(setUser(res.user!.uid))
+        console.log('login', false);
+        dispatch(setLoading(false))
       }
 
     } catch (err) {
@@ -139,6 +141,7 @@ export const signout = (): ThunkAction<void, RootState, null, AuthAction> => {
   return async (dispatch) => {
     try {
       await firebase.auth().signOut();
+      dispatch(setLoading(false))
       dispatch({
         type: SIGN_OUT,
       });

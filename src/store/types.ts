@@ -7,7 +7,6 @@ import { Order, Product, Seller, SellersArr } from './uiData/dataTypes'
 export const SET_USER = "SET_USER";
 export const SET_BUSINESS_USER = "SET_BUSINESS_USER";
 export const SIGN_OUT = "SIGN_OUT";
-export const SET_LOADING = "SET_LOADING";
 export const SET_ERROR = "SET_ERROR";
 export const NEED_VERIFICATION = "NEED_VERIFICATION";
 export const SET_SUCCESS = "SET_SUCCESS";
@@ -99,6 +98,8 @@ export const SET_CART_AMOUNT = 'SET_CART_AMOUNT'
 export const SET_ORDER = 'SET_ORDER'
 export const MAP_LOADED = 'MAP_LOADED'
 export const ADD_EXTRA_PRODUCT = 'ADD_EXTRA_PRODUCT'
+export const SET_LOADING = 'SET_LOADING'
+
 
 
 export interface initialLoggedState {
@@ -107,6 +108,7 @@ export interface initialLoggedState {
   cartAmount: number,
   order: Order[],
   mapLoaded: boolean,
+  loading: boolean,
 
 }
 
@@ -146,6 +148,11 @@ interface DeleteProduct {
   data: string
 }
 
+interface SetLoading {
+  type: typeof SET_LOADING;
+  data: boolean;
+}
+
 export type LoggedActions =
   | GetProducts
   | GetSeller
@@ -154,6 +161,7 @@ export type LoggedActions =
   | MapLoaded
   | AddExtraProduct
   | DeleteProduct
+  | SetLoading
 
 
 

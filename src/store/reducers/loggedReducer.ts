@@ -1,6 +1,6 @@
 import { stat } from 'fs';
 import Products from '../../pages/Products';
-import { GET_PRODUCTS, GET_SELLER, initialLoggedState, LoggedActions, SET_CART_AMOUNT, SET_ORDER, MAP_LOADED, ADD_EXTRA_PRODUCT, DELETE_PRODUCT } from '../types'
+import { SET_LOADING, GET_PRODUCTS, GET_SELLER, initialLoggedState, LoggedActions, SET_CART_AMOUNT, SET_ORDER, MAP_LOADED, ADD_EXTRA_PRODUCT, DELETE_PRODUCT } from '../types'
 import { Order } from '../uiData/dataTypes';
 
 
@@ -10,6 +10,7 @@ const initialState: initialLoggedState = {
     cartAmount: 0,
     order: [],
     mapLoaded: false,
+    loading: false
 
 }
 
@@ -97,6 +98,13 @@ export default (state = initialState, action: LoggedActions): initialLoggedState
                 cartAmount: amountAfterDeleting,
                 
             }
+        case SET_LOADING:
+
+        console.log(action.data);
+                return {
+                  ...state,
+                  loading: action.data,
+                };
 
         case MAP_LOADED:
             return {

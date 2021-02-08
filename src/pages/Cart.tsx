@@ -1,14 +1,5 @@
 import React, { FC, useEffect, useState, FormEvent } from "react";
-import {
-  Container,
-  ListGroup,
-  Button,
-  Row,
-  Col,
-  Form,
-  InputGroup,
-  ButtonToolbar,
-} from "react-bootstrap";
+import { Container, ListGroup, Button, Spinner, Form } from "react-bootstrap";
 import { Order } from "../store/uiData/dataTypes";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
@@ -17,9 +8,9 @@ import {
   addExtraProduct,
   deleteProduct,
   makeOrder,
+  setLoading,
 } from "../store/actions/loggedActions";
-
-import { FullOrder } from "../store/uiData/dataTypes";
+import AlertMessage from "../components/AlertMessage";
 
 const Cart: FC = () => {
   const [orderSum, setOrderSum] = useState(0);
@@ -33,8 +24,10 @@ const Cart: FC = () => {
   const [telephone, setTelephone] = useState("");
   const [buyerId, setBuyerId] = useState("");
   const [merchandise, setMerchandise] = useState<Order[]>([]);
+  const [orderClick, setOrderClick] = useState(false);
 
   let { order } = useSelector((state: RootState) => state.logged);
+  let { loading } = useSelector((state: RootState) => state.logged);
   let { user } = useSelector((state: RootState) => state.auth);
 
   const dispatch = useDispatch();
@@ -65,8 +58,6 @@ const Cart: FC = () => {
     setOrderSum(
       order.reduce((a, item) => a + item.productPrice * item.productQuantity, 0)
     );
-
-    // setEmail(user!.email || "");
   }, [order]);
 
   const deliveryChangeHandler = (e: any): void => {
@@ -78,7 +69,14 @@ const Cart: FC = () => {
 
   const orderSubmitHandler = (e: FormEvent): void => {
     e.preventDefault();
-    dispatch(makeOrder({ buyerId, merchandise }));
+    setOrderClick(true);
+
+    if (delivery && payment && telephone.length === 9) {
+      dispatch(setLoading(true));
+
+      dispatch(makeOrder({ buyerId, merchandise }));
+      setOrderClick(false);
+    }
   };
 
   return (
@@ -113,9 +111,6 @@ const Cart: FC = () => {
                     >
                       <RiDeleteBin5Line className="cart__item-bin" />
                     </Button>
-                    <Form.Group controlId="exampleForm.ControlSelect1">
-                      {/*  { <input className="add-product__imput" type='number'  value={capacity} step="1" required placeholder="szt." onFocus={reset} onInput={(e) => setQantity(e.currentTarget.valueAsNumber)} />} */}
-                    </Form.Group>
                   </ListGroup.Item>
                 );
               })}
@@ -135,7 +130,18 @@ const Cart: FC = () => {
           </ListGroup>
           {orderSum !== 0 && (
             <div>
-              <Col className="cart__section">
+              {(!payment || !delivery) && orderClick === true ? (
+                <AlertMessage
+                  type={"danger"}
+                  heading={"Nie zaznaczyłeś wymaganego pola!"}
+                  msg={
+                    "Nie jest wybrana opcja dostawy lub płatności które są wymagane."
+                  }
+                />
+              ) : (
+                ""
+              )}
+              <Form.Group className="cart__section">
                 <h3 className="cart__section-title">1. Metoda dostawy</h3>
                 <Form.Check
                   value="courier"
@@ -151,8 +157,8 @@ const Cart: FC = () => {
                   label="Odbiór osobisty"
                   onChange={deliveryChangeHandler}
                 />
-              </Col>
-              <Col className="cart__section">
+              </Form.Group>
+              <Form.Group className="cart__section">
                 <h3 className="cart__section-title">2. Metoda płatności</h3>
                 <Form.Label className="cart__payment-option">
                   <Form.Check
@@ -204,9 +210,14 @@ const Cart: FC = () => {
                   Przy odbiorze
                   <span className="cart__payment-option-span">(10 zł)</span>
                 </Form.Label>
-              </Col>
-              <Col className="cart__section">
+              </Form.Group>
+              <Form.Group className="cart__section">
                 <h3 className="cart__section-title">3. Dane odbiorcy</h3>
+                {nameSurname.length === 0 && orderClick ? (
+                  <AlertMessage type="danger" heading="Pole wymagane!" />
+                ) : (
+                  ""
+                )}
                 <Form.Label>
                   imię i nazwisko
                   <Form.Control
@@ -220,6 +231,11 @@ const Cart: FC = () => {
                     }}
                   />
                 </Form.Label>
+                {streetAndNumber.length === 0 && orderClick ? (
+                  <AlertMessage type="danger" heading="Pole wymagane!" />
+                ) : (
+                  ""
+                )}
                 <Form.Label>
                   ulica i numer domu
                   <Form.Control
@@ -233,6 +249,11 @@ const Cart: FC = () => {
                     }}
                   />
                 </Form.Label>
+                {postcode.length === 0 && orderClick ? (
+                  <AlertMessage type="danger" heading="Pole wymagane!" />
+                ) : (
+                  ""
+                )}
                 <Form.Label>
                   kod pocztowy
                   <Form.Control
@@ -246,6 +267,11 @@ const Cart: FC = () => {
                     }}
                   />
                 </Form.Label>
+                {town.length === 0 && orderClick ? (
+                  <AlertMessage type="danger" heading="Pole wymagane!" />
+                ) : (
+                  ""
+                )}
                 <Form.Label>
                   miejscowość
                   <Form.Control
@@ -259,6 +285,11 @@ const Cart: FC = () => {
                     }}
                   />
                 </Form.Label>
+                {email.length === 0 && orderClick ? (
+                  <AlertMessage type="danger" heading="Pole wymagane!" />
+                ) : (
+                  ""
+                )}
                 <Form.Label>
                   e-mail
                   <Form.Control
@@ -272,6 +303,14 @@ const Cart: FC = () => {
                     }}
                   />
                 </Form.Label>
+                {telephone.length !== 9 && orderClick ? (
+                  <AlertMessage
+                    type="danger"
+                    heading="Numer powinien być dziewięciocyfrowy!"
+                  />
+                ) : (
+                  ""
+                )}
                 <Form.Label>
                   Telefon
                   <Form.Control
@@ -285,7 +324,7 @@ const Cart: FC = () => {
                     }}
                   />
                 </Form.Label>
-              </Col>
+              </Form.Group>
               <Button
                 className="cart__order-btn"
                 variant="outline-success"
@@ -293,7 +332,11 @@ const Cart: FC = () => {
                 size="sm"
                 onClick={orderSubmitHandler}
               >
-                Zamów
+                {loading ? (
+                  <Spinner animation="border" variant="primary" size="sm" />
+                ) : (
+                  "Zamów"
+                )}
               </Button>
             </div>
           )}

@@ -1,61 +1,50 @@
 .sign-up {
-    background-image: url('../assets/img/sign-up-background-mobile-460x657-min.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    position: absolute;
-    width: 100%;
-    top: 0;
-    min-height: 100%;
+  background-image: url("../assets/img/sign-up-background-mobile-460x657-min.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: absolute;
+  width: 100%;
+  top: 0;
+  min-height: 100%;
 
+  @media screen and (min-width: map-get($breakpoins, sm)) {
+    background-image: url("../assets/img/sign-up-background-mobile-800x1143-min.jpg");
+  }
 
-    @media screen and (min-width: map-get($breakpoins, sm)) {
-        background-image: url('../assets/img/sign-up-background-mobile-800x1143-min.jpg');
+  @media screen and (min-width: map-get($breakpoins, lg)) {
+    background-image: url("../assets/img/sign-up-background-desktop-1280x720-min.jpg");
+  }
+
+  @media screen and (min-width: map-get($breakpoins, xl)) {
+    background-image: url("../assets/img/sign-up-background-desktop-1980x1114-min.jpg");
+  }
+
+  .sign-up__container {
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.5);
+    margin: 100px auto;
+    position: relative;
+    margin-top: 250px;
+    width: 90%;
+
+    .sign-up__business-form-row {
+      margin: 20px 0;
+
+      .sign-up__business-btn {
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
+      }
     }
 
-    @media screen and (min-width: map-get($breakpoins, lg)) {
-        background-image: url('../assets/img/sign-up-background-desktop-1280x720-min.jpg');
+    .sign-up__button-container {
+      margin-bottom: 50px;
+
+      .sign-up__button {
+        position: absolute;
+        right: 10px;
+      }
     }
-
-    @media screen and (min-width: map-get($breakpoins, xl)) {
-        background-image: url('../assets/img/sign-up-background-desktop-1980x1114-min.jpg');
-    }
-
-    .sign-up__container {
-        padding: 10px;
-        background-color: rgba(255, 255, 255, 0.5);
-        margin: 100px auto;
-        position: relative;
-        margin-top: 250px;
-        width: 90%;
-
-
-        .sign-up__business-form-row {
-
-            margin: 20px 0;
-
-            .sign-up__business-btn {
-                position: absolute;
-                right: 10px;
-
-            }
-
-
-        }
-
-        /* 
-        .sign-up__button-container {
-            margin-bottom: 50px;
-
-            .sign-up__button {
-                position: absolute;
-                right: 10px;
-            }
-        } */
-
-
-
-    }
-
-
+  }
 }

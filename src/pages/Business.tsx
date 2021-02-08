@@ -6,10 +6,9 @@ import React, {
   lazy,
   Suspense,
 } from "react";
-import { Form, Button, Col, Container } from "react-bootstrap";
+import { Form, Button, Spinner, Col, Container } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { businessSignup } from "../store/actions/authAction";
-import { loadMapApi } from "../mapUtils/googleMapUtils";
 
 import { setError } from "../store/actions/authAction";
 import { RootState } from "../store";
@@ -35,6 +34,7 @@ const Business: FC = () => {
   const { authentication, error } = useSelector(
     (state: RootState) => state.auth
   );
+
   const { mapLoaded } = useSelector((state: RootState) => state.logged);
 
   useEffect(() => {
@@ -47,6 +47,7 @@ const Business: FC = () => {
 
   const submitHandler = (e: FormEvent): void => {
     e.preventDefault();
+    setLoading(true);
     dispatch(
       businessSignup(
         { name, password, email, postcode, city, street, products },
@@ -81,6 +82,12 @@ const Business: FC = () => {
   const getProducts = (products: Product[]): void => {
     setProducts(products);
   };
+
+  useEffect(() => {
+    if (authentication) {
+      setLoading(false);
+    }
+  }, [authentication]);
 
   return (
     <div className="sign-up">
@@ -192,17 +199,22 @@ const Business: FC = () => {
                   }}
                 />
               </Col>
-              <Col md={2}>
-                <Button
-                  className="sign-up__business-btn"
-                  variant="outline-success"
-                  type="submit"
-                >
-                  Zatwierdź
-                </Button>
-              </Col>
+              <AddProducts getProducts={getProducts} />
+              {/*             <Col md={2}>
+     
+              </Col> */}
+              <Button
+                className="sign-up__business-btn"
+                variant="outline-success"
+                type="submit"
+              >
+                {loading && !authentication ? (
+                  <Spinner animation="border" variant="primary" size="sm" />
+                ) : (
+                  "Zatwierdź"
+                )}
+              </Button>
             </Form.Row>
-            <AddProducts getProducts={getProducts} />
           </Form>
         </Container>
       )}

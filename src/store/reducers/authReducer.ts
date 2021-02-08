@@ -11,8 +11,6 @@ export default (state = initialState, action: AuthAction): InitialAutgState => {
 
   switch (action.type) {
     case SET_USER:
-
-    console.log(action.data);
       return {
         ...state,
         user: action.data,
