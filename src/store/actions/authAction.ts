@@ -77,6 +77,7 @@ export const businessSignup = (
           city: data.city,
           street: data.street,
           products: data.products,
+          location: data.location,
           businessStatus: 'business'
 
         };
@@ -123,7 +124,6 @@ export const login = (
         const authentication: boolean = true
         dispatch(authenticationSetup({ authentication }));
         dispatch(setUser(res.user!.uid))
-        console.log('login', false);
         dispatch(setLoading(false))
       }
 

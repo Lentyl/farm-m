@@ -48,9 +48,19 @@ const Business: FC = () => {
   const submitHandler = (e: FormEvent): void => {
     e.preventDefault();
     setLoading(true);
+
     dispatch(
       businessSignup(
-        { name, password, email, postcode, city, street, products },
+        {
+          name,
+          password,
+          email,
+          postcode,
+          city,
+          street,
+          products,
+          location: locationLatLng!,
+        },
         () => setLoading(false)
       )
     );

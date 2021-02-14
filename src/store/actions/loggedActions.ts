@@ -1,8 +1,9 @@
 import { ThunkAction } from "redux-thunk";
 import firebase from "../../firebase/config";
-import { LoggedActions, SET_LOADING, GET_PRODUCTS, GET_SELLER, SET_CART_AMOUNT, SET_ORDER, MAP_LOADED, ADD_EXTRA_PRODUCT, DELETE_PRODUCT } from "../types";
+import { LoggedActions, SET_LOADING, GET_SELLER, SET_ORDER, MAP_LOADED, ADD_EXTRA_PRODUCT, DELETE_PRODUCT, GET_All_ORDERS, GET_SELLER_ORDER_DETAILS } from "../types";
 import { RootState } from "..";
-import { Order, Seller, FullOrder } from "../uiData/dataTypes";
+import { Order, Seller, FullOrder, SellerOrderDetails } from "../uiData/dataTypes";
+import { User } from "firebase";
 
 
 
@@ -53,17 +54,6 @@ export const getProducts = (
     }
 }
 
-/* export const setCartAmount = (
-    cartAmount: number
-): ThunkAction<void, RootState, null, LoggedActions> => {
-    return (dispatch) => {
-
-        dispatch({
-            type: SET_CART_AMOUNT,
-            data: cartAmount,
-        })
-    }
-} */
 export const setOrder = (
     order: Order
 ): ThunkAction<void, RootState, null, LoggedActions> => {
@@ -107,7 +97,7 @@ export const makeOrder = (
              await firebase
                 .firestore()
                 .collection("orders")
-                .doc(new Date().toISOString().substring(1, 19).replace('T',' t '))
+                .doc(order.date)
                 .set(order)
                 .then(()=>{
                     dispatch(setLoading(false))
@@ -119,6 +109,89 @@ export const makeOrder = (
     }
 
 }
+export const getAllOrders = (
+    uid:string
+): ThunkAction<void, RootState, null, LoggedActions> => {
+
+  
+    return async (dispatch) => {
+        try {
+             await firebase
+                .firestore()
+                .collection("orders")
+                .where('buyerId', '==', uid)
+                .get()
+                .then(snapshot => {
+                    dispatch(setLoading(false))
+                snapshot.docs.map(doc => {
+                const userOrderDb = doc.data()
+                const userOrder:FullOrder = {
+                    buyerId: userOrderDb.buyerId,
+                    date: userOrderDb.date,
+                    totalValue: userOrderDb.totalValue,
+                    orderStatus: userOrderDb.orderStatus,
+                    merchandise: userOrderDb.merchandise
+               } 
+           
+               dispatch({
+                    type: GET_All_ORDERS,
+                    data: [userOrder],
+                    })  
+            })
+
+        })} catch (err) {
+            console.log(err);
+        }
+    }
+}
+export const getSellerOrderDetails = (
+    uid:string
+): ThunkAction<void, RootState, null, LoggedActions> => {
+
+  
+    uid ='PPMJc7AUcHfOayvtY3BTigEgwhW2'
+  
+    return async (dispatch) => {
+        try {
+             await firebase
+                .firestore()
+                .collection("users")
+                .where('id','==', uid)
+                .get()
+                .then(snapshot => {
+                    dispatch(setLoading(false))
+                 
+                snapshot.docs.map(doc => {
+                const sellerDb = doc.data()
+
+                const sellerOrderDetails: SellerOrderDetails = {
+                    name: sellerDb.name,
+                    postcode: sellerDb.postcode,
+                    street: sellerDb.street,
+                    city: sellerDb.city,
+                    email: sellerDb.email,
+                    location: sellerDb.location
+                }
+                    console.log(sellerOrderDetails);
+
+                   
+                dispatch({
+                    type: GET_SELLER_ORDER_DETAILS,
+                    data: [sellerOrderDetails],
+                    }) 
+
+                })
+
+          
+
+            })
+        } catch (err) {
+            console.log(err);
+        }
+    }
+}
+
+
 
 export const setLoading = (
     value: boolean

@@ -25,6 +25,8 @@ const Cart: FC = () => {
   const [buyerId, setBuyerId] = useState("");
   const [merchandise, setMerchandise] = useState<Order[]>([]);
   const [orderClick, setOrderClick] = useState(false);
+  const [emailValid, setEmailValid] = useState(false);
+  const [telephoneValid, setTelephoneValid] = useState(false);
 
   let { order } = useSelector((state: RootState) => state.logged);
   let { loading } = useSelector((state: RootState) => state.logged);
@@ -32,9 +34,24 @@ const Cart: FC = () => {
 
   const dispatch = useDispatch();
 
+  const emailIsValid = (emailValue: string): void => {
+    if (
+      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
+        emailValue
+      ) &&
+      emailValue.length !== 0
+    ) {
+      setEmailValid(true);
+    } else {
+      setEmailValid(false);
+    }
+  };
+
   useEffect(() => {
     if (user) {
       setNameSurname(user.name);
+
+      emailIsValid(user.email);
       setEmail(user.email);
       setBuyerId(user.id);
 
@@ -71,10 +88,27 @@ const Cart: FC = () => {
     e.preventDefault();
     setOrderClick(true);
 
-    if (delivery && payment && telephone.length === 9) {
+    if (
+      delivery &&
+      payment &&
+      telephoneValid &&
+      emailValid &&
+      streetAndNumber &&
+      town &&
+      postcode &&
+      nameSurname
+    ) {
       dispatch(setLoading(true));
 
-      dispatch(makeOrder({ buyerId, merchandise }));
+      dispatch(
+        makeOrder({
+          buyerId,
+          date: new Date().toISOString().substring(2, 19).replace("T", ", "),
+          totalValue: orderSum,
+          orderStatus: "realizowane",
+          merchandise,
+        })
+      );
       setOrderClick(false);
     }
   };
@@ -285,8 +319,11 @@ const Cart: FC = () => {
                     }}
                   />
                 </Form.Label>
-                {email.length === 0 && orderClick ? (
-                  <AlertMessage type="danger" heading="Pole wymagane!" />
+                {!emailValid && orderClick ? (
+                  <AlertMessage
+                    type="danger"
+                    heading="Pole wymagane, sprawdź poprawność e-maila!"
+                  />
                 ) : (
                   ""
                 )}
@@ -299,14 +336,15 @@ const Cart: FC = () => {
                     placeholder="e-mail"
                     value={email}
                     onChange={(e) => {
+                      emailIsValid(e.currentTarget.value);
                       setEmail(e.currentTarget.value);
                     }}
                   />
                 </Form.Label>
-                {telephone.length !== 9 && orderClick ? (
+                {!telephoneValid && orderClick ? (
                   <AlertMessage
                     type="danger"
-                    heading="Numer powinien być dziewięciocyfrowy!"
+                    heading={`Numer powinien być dziewięciocyfrowy!`}
                   />
                 ) : (
                   ""
@@ -320,6 +358,15 @@ const Cart: FC = () => {
                     placeholder="Telefon"
                     value={telephone}
                     onChange={(e) => {
+                      const isNumber = /^\d*\.?\d+$/.test(
+                        e.currentTarget.value
+                      );
+                      if (isNumber && e.currentTarget.value.length === 9) {
+                        setTelephoneValid(true);
+                      } else {
+                        setTelephoneValid(false);
+                      }
+
                       setTelephone(e.currentTarget.value);
                     }}
                   />

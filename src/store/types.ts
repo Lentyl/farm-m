@@ -1,5 +1,5 @@
 
-import { Order, Product, Seller, SellersArr } from './uiData/dataTypes'
+import { FullOrder, Order, Product, Seller, SellersArr, LocationLatLng, SellerOrderDetails } from './uiData/dataTypes'
 
 
 
@@ -19,6 +19,7 @@ export interface User {
   email: string;
   id: string;
   password?: string;
+  location?: LocationLatLng; 
   postcode?: string;
   city?: string;
   street?: string;
@@ -33,10 +34,13 @@ export interface SignUpData {
 }
 
 
+
+
 export interface BusinessSignUpData extends SignUpData {
   postcode: string;
   city: string;
   street: string;
+  location: LocationLatLng;
   products: Product[];
 }
 
@@ -99,6 +103,8 @@ export const SET_ORDER = 'SET_ORDER'
 export const MAP_LOADED = 'MAP_LOADED'
 export const ADD_EXTRA_PRODUCT = 'ADD_EXTRA_PRODUCT'
 export const SET_LOADING = 'SET_LOADING'
+export const GET_All_ORDERS = 'GET_All_ORDERS'
+export const GET_SELLER_ORDER_DETAILS = 'GET_SELLER_ORDER_DETAILS'
 
 
 
@@ -109,7 +115,8 @@ export interface initialLoggedState {
   order: Order[],
   mapLoaded: boolean,
   loading: boolean,
-
+  allOrders: FullOrder[],
+  sellersDetails: SellerOrderDetails[],
 }
 
 
@@ -153,6 +160,16 @@ interface SetLoading {
   data: boolean;
 }
 
+interface GetAllOrders {
+  type: typeof GET_All_ORDERS;
+  data: FullOrder[];
+}
+
+interface GetSellerOrderDetails {
+  type: typeof GET_SELLER_ORDER_DETAILS;
+  data: SellerOrderDetails[]
+}
+
 export type LoggedActions =
   | GetProducts
   | GetSeller
@@ -162,6 +179,8 @@ export type LoggedActions =
   | AddExtraProduct
   | DeleteProduct
   | SetLoading
+  | GetAllOrders
+  | GetSellerOrderDetails
 
 
 

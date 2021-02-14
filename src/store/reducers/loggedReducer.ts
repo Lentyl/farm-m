@@ -1,6 +1,15 @@
 import { stat } from 'fs';
 import Products from '../../pages/Products';
-import { SET_LOADING, GET_PRODUCTS, GET_SELLER, initialLoggedState, LoggedActions, SET_CART_AMOUNT, SET_ORDER, MAP_LOADED, ADD_EXTRA_PRODUCT, DELETE_PRODUCT } from '../types'
+import {SET_LOADING,
+        GET_SELLER,
+        initialLoggedState,
+        LoggedActions,
+        SET_ORDER,
+        MAP_LOADED,
+        ADD_EXTRA_PRODUCT,
+        DELETE_PRODUCT,
+        GET_All_ORDERS,
+        GET_SELLER_ORDER_DETAILS } from '../types'
 import { Order } from '../uiData/dataTypes';
 
 
@@ -10,8 +19,9 @@ const initialState: initialLoggedState = {
     cartAmount: 0,
     order: [],
     mapLoaded: false,
-    loading: false
-
+    loading: false,
+    allOrders: [],
+    sellersDetails: [],
 }
 
 export default (state = initialState, action: LoggedActions): initialLoggedState => {
@@ -28,11 +38,7 @@ export default (state = initialState, action: LoggedActions): initialLoggedState
                 ...state,
                 sellers: [...state.sellers, ...action.data]
             }
-        /*         case SET_CART_AMOUNT:
-                    return {
-                        ...state,
-                        cartAmount: action.data,
-                    } */
+ 
         case SET_ORDER:
 
             let data: Order[] = []
@@ -69,6 +75,16 @@ export default (state = initialState, action: LoggedActions): initialLoggedState
                 cartAmount: amount,
 
             }
+
+        case GET_All_ORDERS:
+
+    
+
+            return {
+                ...state,
+                allOrders: [...state.allOrders, ...action.data]
+            }
+
         case ADD_EXTRA_PRODUCT:
 
             const order: Order[] =  state.order.map(product=>{ 
@@ -98,9 +114,14 @@ export default (state = initialState, action: LoggedActions): initialLoggedState
                 cartAmount: amountAfterDeleting,
                 
             }
+  
+        
+        case GET_SELLER_ORDER_DETAILS:
+                return {
+                  ...state,
+                  sellersDetails: [...state.sellersDetails,...action.data]
+                };
         case SET_LOADING:
-
-        console.log(action.data);
                 return {
                   ...state,
                   loading: action.data,
