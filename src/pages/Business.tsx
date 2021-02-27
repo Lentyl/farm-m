@@ -1,11 +1,4 @@
-import React, {
-  FC,
-  FormEvent,
-  useState,
-  useEffect,
-  lazy,
-  Suspense,
-} from "react";
+import React, { FC, FormEvent, useState, useEffect } from "react";
 import { Form, Button, Spinner, Col, Container } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { businessSignup } from "../store/actions/authAction";

@@ -25,12 +25,12 @@ const SearchProduct: FC = () => {
   useEffect(() => {
     sellers = [
       {
-        id: "GIf2ajCzAPSQRA0juN7h3IJ5Gzi1",
-        city: "Płońsk",
+        id: "Va49OhHfgEbVUIJzNuTGeHXICpV2",
+        city: "Gdańsk",
         email: "mialczyk64@wp.pl",
         name: "Miałczyk",
         postcode: "09-100",
-        location: { lat: 52.63, lng: 20.36 },
+        location: { lat: 54.3023016, lng: 18.6137464 },
         products: [
           {
             name: "jabłka",
@@ -177,7 +177,7 @@ const SearchProduct: FC = () => {
               {mapLoaded && (
                 <Map
                   mapType={google.maps.MapTypeId.ROADMAP}
-                  LocationLatLng={sellersArr[chosenSeller].location}
+                  locationLatLng={sellersArr[chosenSeller].location}
                 />
               )}
             </div>

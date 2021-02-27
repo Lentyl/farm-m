@@ -1,6 +1,9 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useEffect } from "react";
 import { Product } from "../store/uiData/dataTypes";
 import { Form, Button, Col, Container, Row } from "react-bootstrap";
+
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
 
 type FormElement = React.FormEvent<HTMLFormElement>;
 
@@ -13,6 +16,14 @@ const AddProducts: FC<IAddProductsProps> = ({ getProducts }) => {
   const [name, setName] = useState<string>("");
   const [price, setPrice] = useState<number>(0);
   const [capacity, setCapacity] = useState<number>(0);
+
+  const { user } = useSelector((state: RootState) => state.auth);
+
+  useEffect(() => {
+    if (user!.products) {
+      setProducts(user!.products);
+    }
+  }, []);
 
   const handleConfirm = (): void => {
     const newList: Product[] = [...products, { name, price, capacity }];
@@ -27,6 +38,8 @@ const AddProducts: FC<IAddProductsProps> = ({ getProducts }) => {
     const newList: Product[] = [...products];
     newList.splice(index, 1);
     setProducts(newList);
+
+    getProducts(newList);
   };
 
   const submitHandler = (e: FormElement) => {};
@@ -35,7 +48,7 @@ const AddProducts: FC<IAddProductsProps> = ({ getProducts }) => {
 
   return (
     <div className="add_product">
-      <Container fluid>
+      <Container className="add_product__container" fluid>
         <Form onSubmit={submitHandler}>
           <Form.Row className="add_product__add-row">
             <Form.Group

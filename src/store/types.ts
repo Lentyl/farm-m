@@ -1,5 +1,5 @@
 
-import { FullOrder, Order, Product, Seller, SellersArr, LocationLatLng, SellerOrderDetails } from './uiData/dataTypes'
+import { FullOrder, Order, Product, Seller, SellersArr, LocationLatLng, SellerOrderDetails, User } from './uiData/dataTypes'
 
 
 
@@ -14,27 +14,11 @@ export const SET_AUTHENTICATION = "SET_AUTHENTICATION";
 export const DELETE_PRODUCT = "DELETE_PRODUCT";
 
 
-export interface User {
-  name: string;
-  email: string;
-  id: string;
-  password?: string;
-  location?: LocationLatLng; 
-  postcode?: string;
-  city?: string;
-  street?: string;
-  products?: Product[];
-  businessStatus?: string;
-}
-
 export interface SignUpData {
   name: string;
   password: string;
   email: string;
 }
-
-
-
 
 export interface BusinessSignUpData extends SignUpData {
   postcode: string;

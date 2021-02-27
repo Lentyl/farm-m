@@ -37,20 +37,17 @@ const OrderDetails: FC<RouteComponentProps<DateProps>> = (props) => {
 
   useEffect(() => {
     dispatch(setLoading(true));
-  }, []);
-
-  useEffect(() => {
-    if (user) dispatch(getAllOrders(user!.id));
+    if (user) {
+      dispatch(getAllOrders(user!.id));
+    }
   }, [user]);
 
   useEffect(() => {
-    const order = allOrders.map((order) => {
-      const orderDate = order.date.replace(" t ", "");
-      if (orderDate === date) {
-        return order;
+    allOrders.forEach((order) => {
+      if (order.date === date) {
+        setOrder(order);
       }
     });
-    setOrder(order[0]);
   }, [allOrders]);
 
   const sellerDetailsHandler = () => {
@@ -76,19 +73,19 @@ const OrderDetails: FC<RouteComponentProps<DateProps>> = (props) => {
                       status zamówienia: {order!.orderStatus}
                     </ListGroup.Item>
                     <Row className="order-details__merchandise">
-                      {order!.merchandise.map((product) => (
-                        <Col>
+                      {order!.merchandise.map((product, i) => (
+                        <Col key={i}>
                           <ListGroup.Item className="list-group-flush">
                             {product.productName}
                           </ListGroup.Item>
                           <ListGroup.Item className="list-group-flush">
-                            {product.productPrice} zł.
+                            {product.productPrice} zł / szt
                           </ListGroup.Item>
                           <ListGroup.Item className="list-group-flush">
-                            {product.productQuantity} szt.
+                            zamówiono {product.productQuantity} szt
                           </ListGroup.Item>
                           <ListGroup.Item className="list-group-flush">
-                            {product.productCapacity} kg.
+                            1 szt - {product.productCapacity} kg
                           </ListGroup.Item>
                         </Col>
                       ))}

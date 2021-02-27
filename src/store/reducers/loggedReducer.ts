@@ -82,7 +82,7 @@ export default (state = initialState, action: LoggedActions): initialLoggedState
 
             return {
                 ...state,
-                allOrders: [...state.allOrders, ...action.data]
+                allOrders: action.data
             }
 
         case ADD_EXTRA_PRODUCT:

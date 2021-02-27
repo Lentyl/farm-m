@@ -1,6 +1,19 @@
-import { type } from "os"
 
 
+
+export interface User {
+    name: string;
+    email: string;
+    id: string;
+    businessStatus: string;
+    password?: string;
+    location?: LocationLatLng; 
+    postcode?: string;
+    city?: string;
+    street?: string;
+    products?: Product[];
+    
+}
 
 
 export interface Product {

@@ -1,6 +1,7 @@
 
 import { ThunkAction } from "redux-thunk";
-import { AuthAction, SET_AUTHENTICATION, SET_USER, SET_BUSINESS_USER, SET_ERROR, SIGN_OUT, SignUpData, BusinessSignUpData, LoginData, User, AuthenticationData, SET_LOADING } from "../types";
+import { AuthAction, SET_AUTHENTICATION, SET_USER, SET_BUSINESS_USER, SET_ERROR, SIGN_OUT, SignUpData, BusinessSignUpData, LoginData, AuthenticationData, SET_LOADING } from "../types";
+import { User} from "../../store/uiData/dataTypes";
 import {setLoading} from './loggedActions'
 import { RootState } from "..";
 import firebase from "../../firebase/config";
@@ -198,7 +199,9 @@ export const setUser = (
            email: userDb.email,
            postcode: userDb.postcode,
            city: userDb.city,
-           street: userDb.street
+           street: userDb.street,
+           businessStatus:userDb.businessStatus,
+           products: userDb.products
          }
 
           dispatch({

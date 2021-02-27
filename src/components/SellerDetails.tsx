@@ -17,14 +17,15 @@ const SellerDetails: FC = () => {
   const { sellersDetails } = useSelector((state: RootState) => state.logged);
 
   return (
-    <div>
+    <div className="order-details">
       {sellersDetails[0] && (
         <Card className="order-details__card">
           <div className="search__map-container">
             {mapLoaded && (
               <Map
                 mapType={google.maps.MapTypeId.ROADMAP}
-                LocationLatLng={sellersDetails[0].location}
+                locationLatLng={sellersDetails[0].location}
+                startAddress={true}
               />
             )}
           </div>
@@ -45,7 +46,7 @@ const SellerDetails: FC = () => {
                     miejscowość: {sellersDetails[0].city}
                   </ListGroup.Item>
                   <ListGroup.Item className="list-group-flush">
-                    ulica/nr. domu: {sellersDetails[0].street}
+                    ulica/nr domu: {sellersDetails[0].street}
                   </ListGroup.Item>
                   <Row className="order-details__merchandise"></Row>
                 </ListGroup>
@@ -54,7 +55,7 @@ const SellerDetails: FC = () => {
             <Row className="order-details__card-btn-container"></Row>
           </Card.Body>
           <Card.Footer className="order-details__card-footer">
-            Możesz skontaktować się ze sprzedającym przez pocztę elektroniczną.
+            Możesz skontaktować się ze sprzedającym, przez pocztę elektroniczną.
           </Card.Footer>
         </Card>
       )}

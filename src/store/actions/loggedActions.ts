@@ -3,7 +3,7 @@ import firebase from "../../firebase/config";
 import { LoggedActions, SET_LOADING, GET_SELLER, SET_ORDER, MAP_LOADED, ADD_EXTRA_PRODUCT, DELETE_PRODUCT, GET_All_ORDERS, GET_SELLER_ORDER_DETAILS } from "../types";
 import { RootState } from "..";
 import { Order, Seller, FullOrder, SellerOrderDetails } from "../uiData/dataTypes";
-import { User } from "firebase";
+import { User} from "../../store/uiData/dataTypes";
 
 
 
@@ -116,6 +116,9 @@ export const getAllOrders = (
   
     return async (dispatch) => {
         try {
+
+            const orders:FullOrder[] = []
+
              await firebase
                 .firestore()
                 .collection("orders")
@@ -132,12 +135,15 @@ export const getAllOrders = (
                     orderStatus: userOrderDb.orderStatus,
                     merchandise: userOrderDb.merchandise
                } 
+
+                orders.push(userOrder)
            
-               dispatch({
-                    type: GET_All_ORDERS,
-                    data: [userOrder],
-                    })  
             })
+
+                dispatch({
+                type: GET_All_ORDERS,
+                data: orders,
+                })  
 
         })} catch (err) {
             console.log(err);
@@ -148,12 +154,13 @@ export const getSellerOrderDetails = (
     uid:string
 ): ThunkAction<void, RootState, null, LoggedActions> => {
 
-  
-    uid ='PPMJc7AUcHfOayvtY3BTigEgwhW2'
+
   
     return async (dispatch) => {
+
         try {
-             await firebase
+
+            await firebase
                 .firestore()
                 .collection("users")
                 .where('id','==', uid)
@@ -161,34 +168,59 @@ export const getSellerOrderDetails = (
                 .then(snapshot => {
                     dispatch(setLoading(false))
                  
-                snapshot.docs.map(doc => {
-                const sellerDb = doc.data()
+                    snapshot.docs.map(doc => {
+                    
+                        const sellerDb = doc.data()
 
-                const sellerOrderDetails: SellerOrderDetails = {
-                    name: sellerDb.name,
-                    postcode: sellerDb.postcode,
-                    street: sellerDb.street,
-                    city: sellerDb.city,
-                    email: sellerDb.email,
-                    location: sellerDb.location
-                }
-                    console.log(sellerOrderDetails);
+                        const sellerOrderDetails: SellerOrderDetails = {
+                        name: sellerDb.name,
+                        postcode: sellerDb.postcode,
+                        street: sellerDb.street,
+                        city: sellerDb.city,
+                        email: sellerDb.email,
+                        location: sellerDb.location
+                        }
 
-                   
-                dispatch({
-                    type: GET_SELLER_ORDER_DETAILS,
-                    data: [sellerOrderDetails],
-                    }) 
-
+                          dispatch({
+                            type: GET_SELLER_ORDER_DETAILS,
+                            data: [sellerOrderDetails],
+                            }) 
+                        
                 })
 
-          
-
             })
+
         } catch (err) {
             console.log(err);
         }
     }
+}
+
+export const updateUser = (
+    user:User
+): ThunkAction<void, RootState, null, LoggedActions> => {
+
+    console.log(user);
+    return async (dispatch) => {
+        dispatch(setLoading(false))
+       
+      try {
+             await firebase
+                .firestore()
+                .collection('/users')
+                .doc(user.id)
+                .update({
+                    
+                })
+                .then(()=>{
+                    dispatch(setLoading(false))
+                })
+            
+        } catch (err) {
+            console.log(err);
+        } 
+    }
+
 }
 
 

@@ -4,7 +4,8 @@ import carrot from "../assets/svg/carrot.svg";
 import { LocationLatLng } from "../store/uiData/dataTypes";
 
 interface IMapProps {
-  LocationLatLng?: LocationLatLng;
+  locationLatLng?: LocationLatLng;
+  startAddress?: boolean;
   mapType: google.maps.MapTypeId;
   mapTypeControl?: boolean;
   getMapAddress?: (
@@ -28,8 +29,9 @@ type GoogleMarker = google.maps.Marker;
 const Map: FC<IMapProps> = ({
   mapType,
   mapTypeControl = false,
+  startAddress,
   getMapAddress,
-  LocationLatLng,
+  locationLatLng,
 }) => {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -47,7 +49,10 @@ const Map: FC<IMapProps> = ({
   useEffect(startMap, [map]);
 
   const defaultMapStart = (): void => {
-    const defaultAddress = new google.maps.LatLng(53, 20);
+    const defaultAddress = new google.maps.LatLng(
+      startAddress ? locationLatLng!.lat : 53,
+      startAddress ? locationLatLng!.lng : 20
+    );
     initMap(8, defaultAddress);
   };
 
@@ -151,11 +156,10 @@ const Map: FC<IMapProps> = ({
     }
 
     if (mapTypeControl === false) {
-      console.log("add single marker");
       const marker = {
         address: "Płońsk",
-        latitude: LocationLatLng!.lat,
-        longitude: LocationLatLng!.lng,
+        latitude: locationLatLng!.lat,
+        longitude: locationLatLng!.lng,
       };
 
       setMarker(marker);
