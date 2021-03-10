@@ -1,6 +1,6 @@
 
 import { ThunkAction } from "redux-thunk";
-import { AuthAction, SET_AUTHENTICATION, SET_USER, SET_BUSINESS_USER, SET_ERROR, SIGN_OUT, SignUpData, BusinessSignUpData, LoginData, AuthenticationData, SET_LOADING } from "../types";
+import { AuthAction, SET_AUTHENTICATION, SET_USER, SET_BUSINESS_USER,SET_SUCCESS, SET_ERROR, SIGN_OUT, SignUpData, BusinessSignUpData, LoginData, AuthenticationData, SET_LOADING } from "../types";
 import { User} from "../../store/uiData/dataTypes";
 import {setLoading} from './loggedActions'
 import { RootState } from "..";
@@ -61,6 +61,8 @@ export const businessSignup = (
   onError: () => void
 ): ThunkAction<void, RootState, null, AuthAction> => {
 
+ const productType = data.products.map(product=>product.name);
+
   return async (dispatch) => {
 
     try {
@@ -78,6 +80,7 @@ export const businessSignup = (
           city: data.city,
           street: data.street,
           products: data.products,
+          productType: productType,
           location: data.location,
           businessStatus: 'business'
 
@@ -201,7 +204,8 @@ export const setUser = (
            city: userDb.city,
            street: userDb.street,
            businessStatus:userDb.businessStatus,
-           products: userDb.products
+           products: userDb.products,
+           location: userDb.location
          }
 
           dispatch({
@@ -218,4 +222,30 @@ export const setUser = (
 
   }
 }
+
+
+ export const setSuccess = (
+  msg: string
+): ThunkAction<void, RootState, null, AuthAction> => {
+  return (dispatch) => {
+    dispatch({
+      type: SET_SUCCESS,
+      data: msg,
+    });
+  };
+};
+
+export const sendPasswordResetEmail = (
+  email: string,
+): ThunkAction<void, RootState, null, AuthAction> => {
+  return async (dispatch) => {
+    try {
+      await firebase.auth().sendPasswordResetEmail(email);
+       dispatch(setSuccess('email został wysłany'));
+    } catch (err) {
+      console.log(err.message);
+    dispatch(setError(err.message)); 
+    }
+  };
+};
 

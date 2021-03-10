@@ -1,51 +1,46 @@
 import { ThunkAction } from "redux-thunk";
 import firebase from "../../firebase/config";
-import { LoggedActions, SET_LOADING, GET_SELLER, SET_ORDER, MAP_LOADED, ADD_EXTRA_PRODUCT, DELETE_PRODUCT, GET_All_ORDERS, GET_SELLER_ORDER_DETAILS } from "../types";
+import { LoggedActions, SET_LOADING, SET_ORDER, MAP_LOADED, ADD_EXTRA_PRODUCT, DELETE_PRODUCT, GET_All_ORDERS, GET_SELLER_ORDER_DETAILS, SET_USER, UPDATE_URL, GET_PRODUCTS } from "../types";
 import { RootState } from "..";
-import { Order, Seller, FullOrder, SellerOrderDetails } from "../uiData/dataTypes";
+import { Order,Seller, FullOrder, SellerOrderDetails } from "../uiData/dataTypes";
 import { User} from "../../store/uiData/dataTypes";
-
-
-
 
 export const getProducts = (
     searchValue: string
 ): ThunkAction<void, RootState, null, LoggedActions> => {
     return async (dispatch) => {
         try {
-
+            const sellersProducts:Seller[] = []
             await firebase
                 .firestore()
                 .collection("users")
                 .where('productType', 'array-contains', searchValue)
                 .get()
                 .then(snapshot => {
+                    
                     snapshot.docs.map(doc => {
-
+                        
                         const sellers = doc.data()
 
-                        const location = { lat: 44.5, lng: 60.4 }
-
-                        const sellerArr: Seller = {
+                        const sellersArr: Seller = {
                             id: sellers.name,
                             name: sellers.name,
                             postcode: sellers.postcode,
                             city: sellers.city,
                             street: sellers.street,
                             email: sellers.email,
-                            location: location,
+                            location: sellers.location,
                             products: sellers.products,
                             searchedProduct: searchValue,
                         }
-
-                        dispatch({
-                            type: GET_SELLER,
-                            data: [sellerArr],
-                        })
-
+                        sellersProducts.push(sellersArr)
                     })
                 })
 
+                dispatch({
+                    type: GET_PRODUCTS,
+                    data: sellersProducts,
+                })
 
         } catch (err) {
             console.log(err);
@@ -200,7 +195,6 @@ export const updateUser = (
     user:User
 ): ThunkAction<void, RootState, null, LoggedActions> => {
 
-    console.log(user);
     return async (dispatch) => {
         dispatch(setLoading(false))
        
@@ -210,15 +204,40 @@ export const updateUser = (
                 .collection('/users')
                 .doc(user.id)
                 .update({
-                    
+                  name: user.name,
+                  email: user.email,
+                  postcode: user.postcode,
+                  city: user.city,
+                  street: user.street,
+                  products: user.products,
+                  location: user.location,
                 })
                 .then(()=>{
+
+                    dispatch({
+                        type: SET_USER,
+                        data: user,
+                      })
                     dispatch(setLoading(false))
                 })
             
         } catch (err) {
             console.log(err);
         } 
+    }
+
+}
+export const updateUrl = (
+    url:string
+): ThunkAction<void, RootState, null, LoggedActions> => {
+
+    return (dispatch) => {
+
+        dispatch({
+            type: UPDATE_URL,
+            data: url,
+        })
+       
     }
 
 }

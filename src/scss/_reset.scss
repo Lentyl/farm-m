@@ -1,10 +1,8 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-
-
 
 $base-font-size: 16px;
 
@@ -12,12 +10,10 @@ $main-spacing: 20px;
 
 $main-color: #18ca00;
 
-
-
-$breakpoins: (xs: 360px,
-    sm: 480px,
-    md: 640px,
-    lg: 800px,
-    xl:1280px,
-
+$breakpoins: (
+  xs: 360px,
+  sm: 480px,
+  md: 640px,
+  lg: 768px,
+  xl: 1200px,
 );

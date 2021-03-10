@@ -7,13 +7,12 @@ import {
   Nav,
   NavDropdown,
   Form,
-  FormControl,
   Button,
   Spinner,
 } from "react-bootstrap";
 import { RootState } from "../store";
 import { useDispatch, useSelector } from "react-redux";
-import { getProducts, setLoading } from "../store/actions/loggedActions";
+import { getProducts } from "../store/actions/loggedActions";
 import {
   signout,
   authenticationSetup,
@@ -21,14 +20,15 @@ import {
 } from "../store/actions/authAction";
 import { FaShoppingCart } from "react-icons/fa";
 import { GiCarrot } from "react-icons/gi";
+import ProductAutocomplete from "./ProductAutocomplete";
 
 const Header: React.FC = () => {
   const [searchValue, setSearchValue] = useState("");
-  const [serch, setSerch] = useState(false);
+  const [searchInputDisplay, setSearchInputDisplay] = useState(false);
   const [loading, setLoading] = useState(false);
 
   let { authentication } = useSelector((state: RootState) => state.auth);
-  const { cartAmount } = useSelector((state: RootState) => state.logged);
+  const { cartAmount, url } = useSelector((state: RootState) => state.logged);
 
   const dispatch = useDispatch();
 
@@ -38,13 +38,19 @@ const Header: React.FC = () => {
       dispatch(authenticationSetup({ authentication }));
       dispatch(setUser(user!.uid));
     });
-
-    const path = window.location.pathname;
-
-    if (path === "/" || path === "/products") {
-      setSerch(true);
-    }
   }, []);
+
+  useEffect(() => {
+    if (url === "/" || url === "/products") {
+      setSearchInputDisplay(true);
+    } else {
+      setSearchInputDisplay(false);
+    }
+  }, [url]);
+
+  useEffect(() => {
+    if (!authentication) setLoading(false);
+  }, [authentication]);
 
   const logoutHandler = (): void => {
     setLoading(true);
@@ -55,19 +61,18 @@ const Header: React.FC = () => {
     e.preventDefault();
     const search = searchValue.toLowerCase();
     dispatch(getProducts(search));
-    setSearchValue("");
   };
 
-  useEffect(() => {
-    if (!authentication) setLoading(false);
-  }, [authentication]);
+  const getSelectedProduct = (product: string) => {
+    setSearchValue(product);
+  };
 
   return (
     <header className="header">
       <Navbar
         className="header__navbar"
         collapseOnSelect
-        expand="lg"
+        expand="xl"
         bg="dark"
         variant="dark"
       >
@@ -138,23 +143,13 @@ const Header: React.FC = () => {
               </LinkB>
             )}
           </Nav>
-
-          {serch && (
+          {searchInputDisplay && (
             <Form
               className="header__search-form"
               onSubmit={submitHandler}
               inline
             >
-              <FormControl
-                className="mr-sm-3 header_search-input"
-                size="sm"
-                type="text"
-                placeholder="wyszukaj produkt"
-                value={searchValue}
-                onChange={(e) => {
-                  setSearchValue(e.currentTarget.value);
-                }}
-              />
+              <ProductAutocomplete getSelectedProduct={getSelectedProduct} />
               <Button
                 className="header__search-button"
                 variant="outline-success"
@@ -164,8 +159,11 @@ const Header: React.FC = () => {
               </Button>
             </Form>
           )}
-
-          <Nav className="header__cart-container">
+          <Nav
+            className={`header__cart-container ${
+              searchInputDisplay && "search"
+            }`}
+          >
             <LinkB className="header__cart-link" to="/cart">
               <FaShoppingCart className="header__cart-icon" />
               <div className="header__cart-item-counter">{cartAmount}</div>

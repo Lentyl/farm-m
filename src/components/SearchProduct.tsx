@@ -15,7 +15,7 @@ const SearchProduct: FC = () => {
   const [chosenSeller, setChosenSeller] = useState(0);
   const [scriptLoaded, setScriptLoaded] = useState(false);
 
-  let { sellers } = useSelector((state: RootState) => state.logged);
+  const { sellersProducts } = useSelector((state: RootState) => state.logged);
   let { order } = useSelector((state: RootState) => state.logged);
   let { authentication } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
@@ -23,33 +23,8 @@ const SearchProduct: FC = () => {
   const { mapLoaded } = useSelector((state: RootState) => state.logged);
 
   useEffect(() => {
-    sellers = [
-      {
-        id: "Va49OhHfgEbVUIJzNuTGeHXICpV2",
-        city: "Gdańsk",
-        email: "mialczyk64@wp.pl",
-        name: "Miałczyk",
-        postcode: "09-100",
-        location: { lat: 54.3023016, lng: 18.6137464 },
-        products: [
-          {
-            name: "jabłka",
-            price: 50,
-            capacity: 60,
-          },
-          {
-            name: "owies",
-            price: 30,
-            capacity: 60,
-          },
-        ],
-        searchedProduct: "jabłka",
-        street: "Wolności 2",
-      },
-    ];
-
-    setSellersArr(sellers);
-  }, []);
+    setSellersArr(sellersProducts);
+  }, [sellersProducts]);
 
   const clickBackwardsHandler = (): void => {
     setDysplayDetails(false);
@@ -86,31 +61,41 @@ const SearchProduct: FC = () => {
             Wyszukaj okazje!! Pamiętaj aby używać liczby pojedynczej (cebula,
             truskawka, marchewka).
           </h2>
-        ) : dysplayDetails === false ? (
-          <ListGroup>
+        ) : !dysplayDetails ? (
+          <ListGroup className="search__list">
             {sellersArr.map((seller, i) => (
               <ListGroup.Item key={i} className="search__list-item">
-                {seller.products.map((product, i) => {
-                  if (product.name === seller.searchedProduct) {
-                    return (
-                      <p key={i} className="search__list-item-paragraph">
-                        nazwa: {product.name}, cena: {product.price} zł, waga
-                        opakowania: {product.capacity} kg
-                      </p>
-                    );
-                  }
-                })}
-                {authentication ? (
-                  <Button
-                    className="search__details-btn"
-                    onClick={() => clickDetailsHandler(i)}
-                    variant="outline-success"
-                  >
-                    szczegóły
-                  </Button>
-                ) : (
-                  ""
-                )}
+                <div className="search__list-item-element-container">
+                  {seller.products.map((product, i) => {
+                    console.log(seller.searchedProduct, product.name);
+                    if (product.name === seller.searchedProduct) {
+                      return (
+                        <div key={i} className="search__list-item-paragraph">
+                          <p className="search__list-item-paragraph-element">
+                            nazwa: {product.name},
+                          </p>
+                          <p className="search__list-item-paragraph-element">
+                            cena: {product.price} zł,
+                          </p>
+                          <p className="search__list-item-paragraph-element">
+                            waga: 1szt - {product.capacity} kg
+                          </p>
+                        </div>
+                      );
+                    }
+                  })}
+                </div>
+                <div className="search__list-item-element-container">
+                  {authentication && (
+                    <Button
+                      className="search__details-btn"
+                      onClick={() => clickDetailsHandler(i)}
+                      variant="outline-success"
+                    >
+                      szczegóły
+                    </Button>
+                  )}
+                </div>
               </ListGroup.Item>
             ))}
           </ListGroup>
@@ -125,51 +110,55 @@ const SearchProduct: FC = () => {
             </Button>
             <Row className="search__details">
               <Row className="search__seller-details">
-                <Col className="search__details-col" md="auto">
+                <Col className="search__details-col" sm="auto">
                   imię: {sellersArr[chosenSeller].name}
                 </Col>
-                <Col className="search__details-col" md="auto">
+                <Col className="search__details-col" sm="auto">
                   kod pocztowy: {sellersArr[chosenSeller].postcode}
                 </Col>
-                <Col className="search__details-col" md="auto">
+                <Col className="search__details-col" sm="auto">
                   miasto: {sellersArr[chosenSeller].city}
                 </Col>
-                <Col className="search__details-col" md="auto">
+                <Col className="search__details-col" sm="auto">
                   ulica: {sellersArr[chosenSeller].street}
                 </Col>
-                <Col className="search__details-col" md="auto">
+                <Col className="search__details-col" sm="auto">
                   e-mail: {sellersArr[chosenSeller].email}
                 </Col>
               </Row>
               <Row className="search__product-details">
-                wszystkie produkty sprzedawcy o imieniu:{" "}
-                {sellersArr[chosenSeller].name}
+                <Col className="search__product-details-paragraph">
+                  wszystkie produkty sprzedawcy o imieniu:{" "}
+                  {sellersArr[chosenSeller].name}
+                </Col>
               </Row>
               {sellersArr[chosenSeller].products.map((product, i) => (
                 <Row key={i} className="search__product-details">
-                  <Col className="search__details-col" md="auto">
+                  <Col className="search__details-col" sm="auto">
                     produkt: {product.name}
                   </Col>
-                  <Col className="search__details-col" md="auto">
+                  <Col className="search__details-col" sm="auto">
                     cena: {product.price} zł
                   </Col>
-                  <Col className="search__details-col" md="auto">
+                  <Col className="search__details-col" sm="auto">
                     waga opakowania: {product.capacity} kg
                   </Col>
-                  <Button
-                    className="search__add-item-btn"
-                    onClick={() => {
-                      clickAddToCartHandler(
-                        product.name,
-                        product.price,
-                        product.capacity,
-                        sellersArr[chosenSeller].id
-                      );
-                    }}
-                    variant="outline-success"
-                  >
-                    <FaShoppingCart /> dodaj do koszyka
-                  </Button>
+                  <Col className="search__details-col" sm="auto">
+                    <Button
+                      className="search__add-item-btn"
+                      onClick={() => {
+                        clickAddToCartHandler(
+                          product.name,
+                          product.price,
+                          product.capacity,
+                          sellersArr[chosenSeller].id
+                        );
+                      }}
+                      variant="outline-success"
+                    >
+                      <FaShoppingCart /> dodaj
+                    </Button>
+                  </Col>
                 </Row>
               ))}
             </Row>

@@ -9,38 +9,45 @@ import {
   ListGroup,
   Button,
 } from "react-bootstrap";
-import { Product } from "../store/uiData/dataTypes";
+import { Product, LocationLatLng } from "../store/uiData/dataTypes";
 import { BsPencil } from "react-icons/bs";
 import { GiPencilBrush } from "react-icons/gi";
-
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
 import {
   getAllOrders,
   setLoading,
   updateUser,
+  updateUrl,
 } from "../store/actions/loggedActions";
 import AddProducts from "../components/AddProducts";
+import AlertMessage from "../components/AlertMessage";
 
 import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 
 const UserPanel: FC = () => {
   const [newProducts, setNewProducts] = useState<Product[]>([]);
   const [editUserDetails, setEditUserDetails] = useState(false);
-  const [nameSurname, setNameSurname] = useState("");
+  const [name, setName] = useState("");
   const [streetAndNumber, setStreetAndNumber] = useState("");
   const [postcode, setPostcode] = useState("");
   const [town, setTown] = useState("");
   const [email, setEmail] = useState("");
+  const [changingAddressAlert1, setChangingAddressAlert1] = useState(false);
+  const [changingAddressAlert2, setChangingAddressAlert2] = useState(false);
+  const [changingDetailsAlert3, setChangingDetailsAlert3] = useState(false);
+  const [alertTwoDisplayOneTime, setAlertTwoDisplayOneTime] = useState(false);
 
-  const { allOrders } = useSelector((state: RootState) => state.logged);
+  const { allOrders, loading } = useSelector(
+    (state: RootState) => state.logged
+  );
   const { user } = useSelector((state: RootState) => state.auth);
-  const { loading } = useSelector((state: RootState) => state.logged);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(setLoading(true));
+    dispatch(updateUrl(window.location.pathname));
   }, []);
 
   useEffect(() => {
@@ -51,7 +58,7 @@ const UserPanel: FC = () => {
     setEditUserDetails(!editUserDetails);
 
     if (user) {
-      setNameSurname(user.name);
+      setName(user.name);
       setEmail(user.email);
 
       if (user.postcode) {
@@ -69,31 +76,96 @@ const UserPanel: FC = () => {
   };
 
   const getProducts = (products: Product[]): void => {
-    console.log("user Panel", products);
     setNewProducts(products);
   };
 
+  const updateDetails = (locationLatLng: LocationLatLng): void => {
+    const updateUserDetails = {
+      name: name === "" ? user!.name : name === user!.name ? user!.name : name,
+      email:
+        email === ""
+          ? user!.email
+          : email === user!.email
+          ? user!.email
+          : email,
+      postcode:
+        postcode === ""
+          ? user!.postcode
+          : postcode === user!.postcode
+          ? user!.postcode
+          : postcode,
+      city: town === "" ? user!.city : town === user!.city ? user!.city : town,
+      street:
+        streetAndNumber === ""
+          ? user!.street
+          : streetAndNumber === user!.street
+          ? user!.street
+          : streetAndNumber,
+      products: newProducts,
+      id: user!.id,
+      businessStatus: user!.businessStatus,
+      location: locationLatLng,
+    };
+    dispatch(updateUser(updateUserDetails));
+  };
+
   const handleConfirmDetails = (): void => {
-    dispatch(setLoading(true));
-    geocodeByAddress("gdańsk").then((results) => {
-      getLatLng(results[0]).then((latLng) => {
-        const locationLatLng = { lat: latLng.lat, lng: latLng.lng };
-
-        const updateUserDetails = {
-          name: nameSurname,
-          email: email,
-          id: user!.id,
-          businessStatus: user!.businessStatus,
-          location: locationLatLng,
-          postcode: postcode,
-          city: town,
-          street: streetAndNumber,
-          products: newProducts,
-        };
-
-        dispatch(updateUser(updateUserDetails));
+    if (
+      town !== user!.city &&
+      postcode !== user!.postcode &&
+      streetAndNumber !== user!.street
+    ) {
+      dispatch(setLoading(true));
+      geocodeByAddress(`${town}, ${streetAndNumber}`).then((results) => {
+        getLatLng(results[0]).then((latLng) => {
+          const locationLatLng = { lat: latLng.lat, lng: latLng.lng };
+          updateDetails(locationLatLng);
+        });
       });
-    });
+    } else if (
+      postcode !== user!.postcode &&
+      town !== user!.city &&
+      streetAndNumber === user!.street
+    ) {
+      if (!changingAddressAlert2) {
+        setChangingAddressAlert1(false);
+        setChangingAddressAlert2(true);
+      } else {
+        setAlertTwoDisplayOneTime(true);
+        dispatch(setLoading(true));
+        geocodeByAddress(`${town}, ${streetAndNumber}`).then((results) => {
+          getLatLng(results[0]).then((latLng) => {
+            const locationLatLng = { lat: latLng.lat, lng: latLng.lng };
+            updateDetails(locationLatLng);
+          });
+        });
+      }
+    } else if (
+      town !== user!.city ||
+      postcode !== user!.postcode ||
+      streetAndNumber !== user!.street
+    ) {
+      setChangingAddressAlert1(true);
+    } else if (email !== user!.email || name !== user!.name) {
+      dispatch(setLoading(true));
+      if (user!.location) {
+        updateDetails(user!.location);
+      }
+    } else if (JSON.stringify(user!.products) !== JSON.stringify(newProducts)) {
+      dispatch(setLoading(true));
+      if (user!.location) {
+        updateDetails(user!.location);
+      }
+    } else if (
+      town === user!.city &&
+      postcode === user!.postcode &&
+      streetAndNumber === user!.street &&
+      email === user!.email &&
+      name === user!.name &&
+      JSON.stringify(user!.products) === JSON.stringify(newProducts)
+    ) {
+      setChangingDetailsAlert3(true);
+    }
   };
 
   return (
@@ -107,7 +179,9 @@ const UserPanel: FC = () => {
       ) : (
         <Container className="userPanel__container">
           <Row>
-            <h2>{user?.name} twoje wszystkie zamówienia</h2>
+            <h2 className="userPanel__header">
+              {user?.name} twoje wszystkie zamówienia
+            </h2>
           </Row>
           <Row className="userPanel__list-container">
             {allOrders.map((order, i) => (
@@ -163,15 +237,42 @@ const UserPanel: FC = () => {
           )}
           {editUserDetails ? (
             <div className="userPanel__edit-container">
+              {changingAddressAlert1 && (
+                <AlertMessage
+                  type={"danger"}
+                  heading={"Zmień wszystkie elementy adresu!"}
+                  msg={
+                    "Zmiana adresu powinna dodyczyć kodu pocztowego, miejscowości jak również nazwy ulicy i nr domu."
+                  }
+                />
+              )}
+              {changingAddressAlert2 && !alertTwoDisplayOneTime && (
+                <AlertMessage
+                  type={"danger"}
+                  heading={"Czy nazwa ulicy i numer domu pozostaje bez zmian?"}
+                  msg={
+                    "Zatwierdź ponownie, jeżeli ulica i nr mieszkania nie powinny się zmienić"
+                  }
+                />
+              )}
+              {changingDetailsAlert3 && (
+                <AlertMessage
+                  type={"danger"}
+                  heading={"Nie dokonano żadnych zmian!"}
+                  msg={
+                    "Musisz wprowadzić zmiany w danych osobowych albo towarach."
+                  }
+                />
+              )}
               <Row className="userPanel__contact-details-wrapper">
                 <Col className="userPanel__contact-details-column no-border ">
-                  <h6>imie i nazwisko</h6>
+                  <h6>nazwa użytkownika </h6>
                   <input
                     className="userPanel__contact-details-input"
                     type="text"
-                    value={nameSurname}
+                    value={name}
                     onChange={(e) => {
-                      setNameSurname(e.currentTarget.value);
+                      setName(e.currentTarget.value);
                     }}
                   />
                 </Col>
@@ -198,7 +299,7 @@ const UserPanel: FC = () => {
                   />
                 </Col>
                 <Col className="userPanel__contact-details-column no-border">
-                  <h6>ulica</h6>
+                  <h6>ulica/nr domu</h6>
                   <input
                     className="userPanel__contact-details-input"
                     type="text"
@@ -237,7 +338,7 @@ const UserPanel: FC = () => {
             <div>
               <Row className="userPanel__contact-details-wrapper">
                 <Col className="userPanel__contact-details-column">
-                  <h6>imie</h6>
+                  <h6>nazwa użytkownika</h6>
                   {user!.name}
                 </Col>
                 <Col className="userPanel__contact-details-column">
@@ -249,7 +350,7 @@ const UserPanel: FC = () => {
                   {user!.city}
                 </Col>
                 <Col className="userPanel__contact-details-column">
-                  <h6>ulica</h6>
+                  <h6>ulica/nr domu</h6>
                   {user!.street}
                 </Col>
                 <Col className="userPanel__contact-details-column">
@@ -258,8 +359,8 @@ const UserPanel: FC = () => {
                 </Col>
               </Row>
               <h4>Twoje Produkty</h4>
-              {user.products!.map((product) => (
-                <Row className="userPanel__product-details">
+              {user.products!.map((product, i) => (
+                <Row className="userPanel__product-details" key={i}>
                   <Col>{product.name}: </Col>
                   <Col>{product.price} zł/szt</Col>
                   <Col>1 szt - {product.capacity} kg</Col>

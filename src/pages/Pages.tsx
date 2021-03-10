@@ -6,6 +6,7 @@ import SignUp from "./SignUp";
 import Business from "./Business";
 import UserPanel from "./UserPanel";
 import Products from "./Products";
+import ForgotPassword from "./ForgotPassword";
 import Cart from "./Cart";
 import OrderDetails from "./OrderDetails";
 
@@ -21,6 +22,7 @@ const Pages: FC = () => {
         <Route path="/products" exact component={Products} />
         <Route path="/cart" exact component={Cart} />
         <Route path="/order-details/:date" exact component={OrderDetails} />
+        <Route path="/forgot-password" exact component={ForgotPassword} />
       </Switch>
     </div>
   );

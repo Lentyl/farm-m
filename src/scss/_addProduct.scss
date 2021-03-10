@@ -4,14 +4,17 @@
 
   .add_product__container {
     margin: 0;
-    padding: 10px 0 10px 20px;
-    .add_product__add-row {
-      display: flex;
-      justify-content: center;
+    padding: 0;
+    width: 100%;
 
+    .add_product__add-row {
+      position: relative;
       .add-product__input-container {
-        .add-product__imput {
-          margin: 0 -20px;
+        padding: 0;
+
+        .add-product__input {
+          margin: 0;
+          padding: 0;
           width: 100%;
           height: 35px;
           text-align: center;
@@ -19,10 +22,30 @@
         }
       }
 
+      .add-product__input-container:nth-child(2) {
+        margin: 0% 1%;
+      }
+      .add-product__input-container:nth-child(3) {
+        margin: 0% 1% 30px 1%;
+        @media screen and (min-width: map-get($breakpoins, lg)) {
+          margin: 0% 1%;
+        }
+      }
+    }
+
+    .add-product__btn-container {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      padding: 0;
+
       .add-product__btn {
         position: absolute;
-        top: 30px;
-        right: 0px;
+        bottom: -50px;
+        right: 0;
+        @media screen and (min-width: map-get($breakpoins, lg)) {
+          bottom: 0;
+        }
       }
     }
   }
@@ -32,10 +55,23 @@
     flex-direction: column;
     justify-content: center;
     background-color: rgba(255, 255, 255, 0.5);
-    margin: 70px auto 0 auto;
+    margin: 100px auto 0 auto;
     position: relative;
     width: 90%;
     min-height: 60px;
+
+    .add-product__list-item {
+      flex-direction: column;
+      @media screen and (min-width: map-get($breakpoins, xs)) {
+        flex-direction: row;
+      }
+
+      .add-product__list-item-element:nth-child(3) {
+        @media screen and (min-width: map-get($breakpoins, xs)) {
+          padding-right: 50px;
+        }
+      }
+    }
 
     .add-product__cancel-btn-container {
       text-align: end;
@@ -46,5 +82,10 @@
       bottom: 10px;
       min-width: 20px;
     }
+  }
+
+  .product-autocomplete__list-container {
+    max-height: 150px;
+    overflow: auto;
   }
 }

@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { signup } from "../store/actions/authAction";
 import { Form, Button, Spinner, Col, Container } from "react-bootstrap";
 import { RootState } from "../store";
+import { updateUrl } from "../store/actions/loggedActions";
 
 const SignUp: FC = () => {
   const [name, setName] = useState("");
@@ -13,7 +14,18 @@ const SignUp: FC = () => {
   const [loading, setLoading] = useState(false);
 
   const { authentication } = useSelector((state: RootState) => state.auth);
+
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(updateUrl(window.location.pathname));
+  }, []);
+
+  useEffect(() => {
+    if (authentication) {
+      setLoading(false);
+    }
+  }, [authentication]);
 
   const submitHandler = (e: FormEvent): void => {
     e.preventDefault();
@@ -25,12 +37,6 @@ const SignUp: FC = () => {
     setEmail("");
     setPermission(false);
   };
-
-  useEffect(() => {
-    if (authentication) {
-      setLoading(false);
-    }
-  }, [authentication]);
 
   return (
     <div className="sign-up">

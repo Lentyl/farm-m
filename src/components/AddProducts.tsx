@@ -1,9 +1,11 @@
 import React, { FC, useState, useEffect } from "react";
 import { Product } from "../store/uiData/dataTypes";
 import { Form, Button, Col, Container, Row } from "react-bootstrap";
-
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
+import ProductAutocomplete from "../components/ProductAutocomplete";
+
+import AlertMessage from "./AlertMessage";
 
 type FormElement = React.FormEvent<HTMLFormElement>;
 
@@ -16,23 +18,40 @@ const AddProducts: FC<IAddProductsProps> = ({ getProducts }) => {
   const [name, setName] = useState<string>("");
   const [price, setPrice] = useState<number>(0);
   const [capacity, setCapacity] = useState<number>(0);
+  const [addingAlert, setAddingAlert] = useState(false);
 
   const { user } = useSelector((state: RootState) => state.auth);
+  const { url } = useSelector((state: RootState) => state.logged);
 
   useEffect(() => {
-    if (user!.products) {
-      setProducts(user!.products);
+    if (url === "/business-sign-up") {
+      if (user!.products) {
+        setProducts(user!.products);
+      }
     }
   }, []);
 
+  const getSelectedProduct = (selectedProduct: string) => {
+    setName(selectedProduct);
+  };
+
   const handleConfirm = (): void => {
     const newList: Product[] = [...products, { name, price, capacity }];
-    setProducts(newList);
-    setName("");
-    setPrice(0);
-    setCapacity(0);
-
-    getProducts(newList);
+    if (
+      name.length !== 0 &&
+      capacity !== 0 &&
+      !Number.isNaN(capacity) &&
+      !Number.isNaN(capacity)
+    ) {
+      setAddingAlert(false);
+      setProducts(newList);
+      setName("");
+      setPrice(0);
+      setCapacity(0);
+      getProducts(newList);
+    } else {
+      setAddingAlert(true);
+    }
   };
   const handleDelet = (index: number): void => {
     const newList: Product[] = [...products];
@@ -49,6 +68,17 @@ const AddProducts: FC<IAddProductsProps> = ({ getProducts }) => {
   return (
     <div className="add_product">
       <Container className="add_product__container" fluid>
+        {addingAlert && (
+          <AlertMessage
+            type={"danger"}
+            heading={
+              "Nazwa produktu i wagę opakowania nie powinny pozostać puste!"
+            }
+            msg={
+              "Nazwa, waga i cena nie powinny być pustymi polami. Waga nie może wynosić zero. "
+            }
+          />
+        )}
         <Form onSubmit={submitHandler}>
           <Form.Row className="add_product__add-row">
             <Form.Group
@@ -58,16 +88,7 @@ const AddProducts: FC<IAddProductsProps> = ({ getProducts }) => {
               controlId="validationCustom01"
             >
               <Form.Label>produkt</Form.Label>
-              <Form.Control
-                className="add-product__imput"
-                required
-                type="text"
-                placeholder="produkt"
-                value={name}
-                onChange={(e) => {
-                  setName(e.currentTarget.value);
-                }}
-              />
+              <ProductAutocomplete getSelectedProduct={getSelectedProduct} />
               <Form.Control.Feedback>Wygląda dobrze!</Form.Control.Feedback>
             </Form.Group>
             <Form.Group
@@ -78,14 +99,15 @@ const AddProducts: FC<IAddProductsProps> = ({ getProducts }) => {
             >
               <Form.Label>cena w zł</Form.Label>
               <input
-                className="add-product__imput"
+                className="add-product__input"
                 type="number"
                 value={price}
                 step="0.01"
+                min="0"
                 required
                 placeholder="zł"
                 onFocus={reset}
-                onInput={(e) => setPrice(e.currentTarget.valueAsNumber)}
+                onChange={(e) => setPrice(e.currentTarget.valueAsNumber)}
               />
               <Form.Control.Feedback>Wygląda dobrze!</Form.Control.Feedback>
             </Form.Group>
@@ -98,14 +120,15 @@ const AddProducts: FC<IAddProductsProps> = ({ getProducts }) => {
               <Form.Label>waga w kg</Form.Label>
               <br />
               <input
-                className="add-product__imput"
+                className="add-product__input"
                 type="number"
                 value={capacity}
+                min="0"
                 step="1"
                 required
                 placeholder="kg"
                 onFocus={reset}
-                onInput={(e) => setCapacity(e.currentTarget.valueAsNumber)}
+                onChange={(e) => setCapacity(e.currentTarget.valueAsNumber)}
               />
               <Form.Control.Feedback>Wygląda dobrze!</Form.Control.Feedback>
             </Form.Group>
@@ -129,14 +152,12 @@ const AddProducts: FC<IAddProductsProps> = ({ getProducts }) => {
       {products.map((product: Product, index: number) => (
         <Container className="add-product__list" fluid key={index}>
           <Row className="add-product__list-item" md={3}>
-            <Col md={3} sm={3}>
-              {product.name}
+            <Col className="add-product__list-item-element">{product.name}</Col>
+            <Col className="add-product__list-item-element">
+              {Number.isNaN(product.price) ? 0 : product.price} zł
             </Col>
-            <Col md={3} sm={2}>
-              {product.price} zł
-            </Col>
-            <Col md={3} sm={2}>
-              {product.capacity} kg
+            <Col className="add-product__list-item-element">
+              {Number.isNaN(product.capacity) ? 0 : product.capacity} kg
             </Col>
             <Col
               md={3}

@@ -15,25 +15,31 @@ import {
   getAllOrders,
   setLoading,
   getSellerOrderDetails,
+  updateUrl,
 } from "../store/actions/loggedActions";
 import { FullOrder } from "../store/uiData/dataTypes";
 import SellerDetails from "../components/SellerDetails";
 
-interface DateProps {
+interface IDateProps {
   date: string;
 }
 
-const OrderDetails: FC<RouteComponentProps<DateProps>> = (props) => {
+const OrderDetails: FC<RouteComponentProps<IDateProps>> = (props) => {
   const { date } = props.match.params;
 
   const [sellerDetails, setSellerDetails] = useState(false);
+  const [order, setOrder] = useState<FullOrder>();
+
+  const { user } = useSelector((state: RootState) => state.auth);
+  const { loading, allOrders } = useSelector(
+    (state: RootState) => state.logged
+  );
 
   const dispatch = useDispatch();
-  const { user } = useSelector((state: RootState) => state.auth);
-  const [order, setOrder] = useState<FullOrder>();
-  const { loading } = useSelector((state: RootState) => state.logged);
 
-  const { allOrders } = useSelector((state: RootState) => state.logged);
+  useEffect(() => {
+    dispatch(updateUrl(window.location.pathname));
+  }, []);
 
   useEffect(() => {
     dispatch(setLoading(true));

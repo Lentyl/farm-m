@@ -1,10 +1,11 @@
 
-import { SET_USER, SET_BUSINESS_USER, SET_ERROR, SET_AUTHENTICATION, SIGN_OUT, InitialAutgState, AuthAction } from "../types";
+import { SET_USER, SET_BUSINESS_USER, SET_ERROR, SET_SUCCESS, SET_AUTHENTICATION, SIGN_OUT, InitialAutgState, AuthAction } from "../types";
 
 const initialState: InitialAutgState = {
   user: null,
   error: '',
   authentication: false,
+  success: "",
 };
 
 export default (state = initialState, action: AuthAction): InitialAutgState => {
@@ -25,6 +26,11 @@ export default (state = initialState, action: AuthAction): InitialAutgState => {
         ...state,
         authentication: false,
       };
+    case SET_SUCCESS:
+        return {
+          ...state,
+          success: action.data,
+        };
     case SET_ERROR:
       return {
         ...state,

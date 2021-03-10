@@ -9,6 +9,7 @@ import {
   deleteProduct,
   makeOrder,
   setLoading,
+  updateUrl,
 } from "../store/actions/loggedActions";
 import AlertMessage from "../components/AlertMessage";
 
@@ -28,24 +29,10 @@ const Cart: FC = () => {
   const [emailValid, setEmailValid] = useState(false);
   const [telephoneValid, setTelephoneValid] = useState(false);
 
-  let { order } = useSelector((state: RootState) => state.logged);
-  let { loading } = useSelector((state: RootState) => state.logged);
-  let { user } = useSelector((state: RootState) => state.auth);
+  const { order, loading } = useSelector((state: RootState) => state.logged);
+  const { user } = useSelector((state: RootState) => state.auth);
 
   const dispatch = useDispatch();
-
-  const emailIsValid = (emailValue: string): void => {
-    if (
-      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
-        emailValue
-      ) &&
-      emailValue.length !== 0
-    ) {
-      setEmailValid(true);
-    } else {
-      setEmailValid(false);
-    }
-  };
 
   useEffect(() => {
     if (user) {
@@ -69,6 +56,7 @@ const Cart: FC = () => {
     }
 
     setMerchandise(order);
+    dispatch(updateUrl(window.location.pathname));
   }, []);
 
   useEffect(() => {
@@ -76,6 +64,19 @@ const Cart: FC = () => {
       order.reduce((a, item) => a + item.productPrice * item.productQuantity, 0)
     );
   }, [order]);
+
+  const emailIsValid = (emailValue: string): void => {
+    if (
+      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
+        emailValue
+      ) &&
+      emailValue.length !== 0
+    ) {
+      setEmailValid(true);
+    } else {
+      setEmailValid(false);
+    }
+  };
 
   const deliveryChangeHandler = (e: any): void => {
     setDelivery(e.target.value);

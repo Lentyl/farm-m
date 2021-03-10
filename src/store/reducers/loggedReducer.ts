@@ -1,7 +1,6 @@
 import { stat } from 'fs';
 import Products from '../../pages/Products';
 import {SET_LOADING,
-        GET_SELLER,
         initialLoggedState,
         LoggedActions,
         SET_ORDER,
@@ -9,35 +8,31 @@ import {SET_LOADING,
         ADD_EXTRA_PRODUCT,
         DELETE_PRODUCT,
         GET_All_ORDERS,
-        GET_SELLER_ORDER_DETAILS } from '../types'
+        GET_SELLER_ORDER_DETAILS,
+        UPDATE_URL,
+        GET_PRODUCTS } from '../types'
 import { Order } from '../uiData/dataTypes';
 
 
 const initialState: initialLoggedState = {
-    products: [],
-    sellers: [],
+    sellersProducts: [],
     cartAmount: 0,
     order: [],
     mapLoaded: false,
     loading: false,
     allOrders: [],
     sellersDetails: [],
+    url:'',
 }
 
 export default (state = initialState, action: LoggedActions): initialLoggedState => {
 
     switch (action.type) {
-        /*      case GET_PRODUCTS:
+       case GET_PRODUCTS:
                  return {
                      ...state,
-                     products: [...state.products, ...action.data]
-                 } */
-
-        case GET_SELLER:
-            return {
-                ...state,
-                sellers: [...state.sellers, ...action.data]
-            }
+                     sellersProducts: action.data
+                 }  
  
         case SET_ORDER:
 
@@ -77,8 +72,6 @@ export default (state = initialState, action: LoggedActions): initialLoggedState
             }
 
         case GET_All_ORDERS:
-
-    
 
             return {
                 ...state,
@@ -126,6 +119,12 @@ export default (state = initialState, action: LoggedActions): initialLoggedState
                   ...state,
                   loading: action.data,
                 };
+        case UPDATE_URL: 
+                return {
+                    ...state,
+                    url: action.data,
+                }
+                
 
         case MAP_LOADED:
             return {

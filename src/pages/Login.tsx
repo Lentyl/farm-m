@@ -1,18 +1,29 @@
 import React, { FC, FormEvent, useEffect, useState } from "react";
 import { Form, Button, Col, Container, Spinner } from "react-bootstrap";
+import { Link as LinkB } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../store/actions/authAction";
-import { setLoading } from "../store/actions/loggedActions";
+import { updateUrl } from "../store/actions/loggedActions";
 import { RootState } from "../store";
 
 const Login: FC = () => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
 
   const { authentication } = useSelector((state: RootState) => state.auth);
-  //const { loading } = useSelector((state: RootState) => state.logged);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(updateUrl(window.location.pathname));
+  }, []);
+
+  useEffect(() => {
+    if (authentication) {
+      setLoading(false);
+    }
+  }, [authentication]);
 
   const submitHandler = (e: FormEvent): void => {
     e.preventDefault();
@@ -21,12 +32,6 @@ const Login: FC = () => {
     setPassword("");
     setEmail("");
   };
-
-  useEffect(() => {
-    if (authentication) {
-      setLoading(false);
-    }
-  }, [authentication]);
 
   return (
     <div className="login">
@@ -74,6 +79,9 @@ const Login: FC = () => {
                 "Zatwierdź"
               )}
             </Button>
+            <LinkB className="login__forgot-link" to="/forgot-password">
+              zapomniałem hasła
+            </LinkB>
           </Form>
         </Container>
       )}

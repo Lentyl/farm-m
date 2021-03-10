@@ -42,6 +42,7 @@ export interface InitialAutgState {
   user: User | null;
   error: string;
   authentication: boolean;
+  success: string
 }
 
 //Actions
@@ -70,18 +71,24 @@ interface setAuthentication {
   data: AuthenticationData
 }
 
+interface SetSuccessAction {
+  type: typeof SET_SUCCESS;
+  data: string;
+}
+
 export type AuthAction =
   | SetUserAction
   | SetBusinessUserAction
   | SignOutAction
+  | SetSuccessAction
   | SetErrorAction
   | setAuthentication;
+  
 
 
 //Logged Types
 
 export const GET_PRODUCTS = 'GET_PRODUCTS'
-export const GET_SELLER = 'GET_SELLER'
 export const SET_CART_AMOUNT = 'SET_CART_AMOUNT'
 export const SET_ORDER = 'SET_ORDER'
 export const MAP_LOADED = 'MAP_LOADED'
@@ -89,30 +96,28 @@ export const ADD_EXTRA_PRODUCT = 'ADD_EXTRA_PRODUCT'
 export const SET_LOADING = 'SET_LOADING'
 export const GET_All_ORDERS = 'GET_All_ORDERS'
 export const GET_SELLER_ORDER_DETAILS = 'GET_SELLER_ORDER_DETAILS'
+export const UPDATE_USER = 'UPDATE_USER'
+export const UPDATE_URL = 'UPDATE_URL'
 
 
 
 export interface initialLoggedState {
-  products: Product[],
-  sellers: SellersArr,
+  sellersProducts: SellersArr,
   cartAmount: number,
   order: Order[],
   mapLoaded: boolean,
   loading: boolean,
   allOrders: FullOrder[],
   sellersDetails: SellerOrderDetails[],
+  url: string,
 }
 
 
 interface GetProducts {
   type: typeof GET_PRODUCTS,
-  data: Product[]
-}
-
-interface GetSeller {
-  type: typeof GET_SELLER,
   data: SellersArr
 }
+
 
 interface SetCartAmount {
   type: typeof SET_CART_AMOUNT,
@@ -122,8 +127,6 @@ interface SetOrder {
   type: typeof SET_ORDER,
   data: Order
 }
-
-
 
 interface MapLoaded {
   type: typeof MAP_LOADED
@@ -153,10 +156,14 @@ interface GetSellerOrderDetails {
   type: typeof GET_SELLER_ORDER_DETAILS;
   data: SellerOrderDetails[]
 }
+interface UpdateUrl {
+  type: typeof UPDATE_URL;
+  data: string
+}
+
 
 export type LoggedActions =
   | GetProducts
-  | GetSeller
   | SetCartAmount
   | SetOrder
   | MapLoaded
@@ -165,6 +172,8 @@ export type LoggedActions =
   | SetLoading
   | GetAllOrders
   | GetSellerOrderDetails
+  | SetUserAction
+  | UpdateUrl
 
 
 

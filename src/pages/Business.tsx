@@ -1,9 +1,8 @@
 import React, { FC, FormEvent, useState, useEffect } from "react";
 import { Form, Button, Spinner, Col, Container } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { businessSignup } from "../store/actions/authAction";
-
-import { setError } from "../store/actions/authAction";
+import { businessSignup, setError } from "../store/actions/authAction";
+import { updateUrl } from "../store/actions/loggedActions";
 import { RootState } from "../store";
 import AddProducts from "../components/AddProducts";
 import { Product, LocationLatLng } from "../store/uiData/dataTypes";
@@ -31,12 +30,22 @@ const Business: FC = () => {
   const { mapLoaded } = useSelector((state: RootState) => state.logged);
 
   useEffect(() => {
+    dispatch(updateUrl(window.location.pathname));
+  }, []);
+
+  useEffect(() => {
     return () => {
       if (error) {
         dispatch(setError(""));
       }
     };
   }, [error, dispatch]);
+
+  useEffect(() => {
+    if (authentication) {
+      setLoading(false);
+    }
+  }, [authentication]);
 
   const submitHandler = (e: FormEvent): void => {
     e.preventDefault();
@@ -72,7 +81,6 @@ const Business: FC = () => {
     postecode: string,
     locationLatLng?: LocationLatLng
   ): void => {
-    // console.log('locationLatLng', locationLatLng);
     if (street || town || postcode) {
       setPostcode(postecode);
       setCity(town);
@@ -85,12 +93,6 @@ const Business: FC = () => {
   const getProducts = (products: Product[]): void => {
     setProducts(products);
   };
-
-  useEffect(() => {
-    if (authentication) {
-      setLoading(false);
-    }
-  }, [authentication]);
 
   return (
     <div className="sign-up">
@@ -202,10 +204,7 @@ const Business: FC = () => {
                   }}
                 />
               </Col>
-              <AddProducts getProducts={getProducts} />
-              {/*             <Col md={2}>
-     
-              </Col> */}
+              {<AddProducts getProducts={getProducts} />}
               <Button
                 className="sign-up__business-btn"
                 variant="outline-success"
