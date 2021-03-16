@@ -146,6 +146,9 @@
     }
     .search {
       top: -80px;
+      @media screen and (min-width: map-get($breakpoins, xl)) {
+      top: 0;
+      }
     }
 
     .header__signout-btn {

@@ -33,6 +33,7 @@ const UserPanel: FC = () => {
   const [postcode, setPostcode] = useState("");
   const [town, setTown] = useState("");
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [changingAddressAlert1, setChangingAddressAlert1] = useState(false);
   const [changingAddressAlert2, setChangingAddressAlert2] = useState(false);
   const [changingDetailsAlert3, setChangingDetailsAlert3] = useState(false);
@@ -118,7 +119,7 @@ const UserPanel: FC = () => {
       setEmailAlertDisplayOneTime(false);
     } else {
       dispatch(setLoading(true));
-      dispatch(updateUser(updateUserDetails, true));
+      dispatch(updateUser(updateUserDetails, true, password));
       setEmailAlertDisplayOneTime(false);
     }
   };
@@ -336,6 +337,19 @@ const UserPanel: FC = () => {
                       setEmail(e.currentTarget.value);
                     }}
                   />
+                  {email !== user!.email && (
+                    <div className="userPanel__contact-email-password-confirmation">
+                      <h6>hasło</h6>
+                      <input
+                        className="userPanel__contact-details-input"
+                        type="password"
+                        value={password}
+                        onChange={(e) => {
+                          setPassword(e.currentTarget.value);
+                        }}
+                      />
+                    </div>
+                  )}
                 </Col>
                 <Button
                   className="userPanel__contact-details-column-btn"

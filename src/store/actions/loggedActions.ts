@@ -193,7 +193,9 @@ export const getSellerOrderDetails = (
 
 export const updateUser = (
     user:User,
-    email: boolean = false
+    email: boolean = false,
+    password?: string
+
 ): ThunkAction<void, RootState, null, LoggedActions> => {
 
     return async (dispatch) => {
@@ -229,22 +231,56 @@ export const updateUser = (
 
         if(email){
 
-           
-            try {
-             
-                admin
-                    .updateUser(user.id, {
-                    email: "modifiedUser@example.com"
-                  });
-   
-           } catch (err) {
-               console.log(err);
-           } 
+            const cUser = firebase.auth().currentUser
 
+            console.log(cUser!.email, password );
+
+            if(cUser!.email && password){
+                console.log('coś tam');
+
+                try {
+                    
+                        const res = await firebase
+                        .auth()
+                        .signInWithEmailAndPassword(cUser!.email, password)
+                        
+                
+                      if (res.operationType === 'signIn') {
+
+                        cUser!.updateEmail(user.email)
+                        .then(()=> {
+                            console.log("Update successful.");
+                        }).catch((error)=>{
+                            console.log(error);
+                        })
+                        
+
+                      }
+
+                            
+                } catch (err) {
+                console.log(err);
+                } 
+            }
         }
     }
-
 }
+                
+/*                   if(!!cUser){
+                    cUser.updateEmail(user.email).then(function() {
+                        console.log("Update successful.");
+                      }).catch(function(error) {
+                        console.log(error);
+                      });
+                     } 
+            
+      
+
+        }
+}
+*/
+
+
 export const updateUrl = (
     url:string
 ): ThunkAction<void, RootState, null, LoggedActions> => {
