@@ -1,5 +1,5 @@
 .sign-up {
-  background-image: url("../assets/img/sign-up-background-mobile-460x657-min.jpg");
+  background-image: url("../assets/img/sign-up-background-mobile-480.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -8,8 +8,8 @@
   top: 0;
   min-height: 100%;
 
-  @media screen and (min-width: map-get($breakpoins, sm)) {
-    background-image: url("../assets/img/sign-up-background-mobile-800x1143-min.jpg");
+  @media screen and (min-width: map-get($breakpoins, md)) {
+    background-image: url("../assets/img/sign-up-background-mobile-640.jpg");
   }
 
   @media screen and (min-width: map-get($breakpoins, lg)) {
