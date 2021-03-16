@@ -37,6 +37,9 @@ const UserPanel: FC = () => {
   const [changingAddressAlert2, setChangingAddressAlert2] = useState(false);
   const [changingDetailsAlert3, setChangingDetailsAlert3] = useState(false);
   const [alertTwoDisplayOneTime, setAlertTwoDisplayOneTime] = useState(false);
+  const [emailAlertDisplayOneTime, setEmailAlertDisplayOneTime] = useState(
+    false
+  );
 
   const { allOrders, loading } = useSelector(
     (state: RootState) => state.logged
@@ -106,7 +109,18 @@ const UserPanel: FC = () => {
       businessStatus: user!.businessStatus,
       location: locationLatLng,
     };
-    dispatch(updateUser(updateUserDetails));
+
+    if (user!.email !== email && !emailAlertDisplayOneTime) {
+      setEmailAlertDisplayOneTime(true);
+    } else if (user!.email === email && emailAlertDisplayOneTime) {
+      dispatch(setLoading(true));
+      dispatch(updateUser(updateUserDetails));
+      setEmailAlertDisplayOneTime(false);
+    } else {
+      dispatch(setLoading(true));
+      dispatch(updateUser(updateUserDetails, true));
+      setEmailAlertDisplayOneTime(false);
+    }
   };
 
   const handleConfirmDetails = (): void => {
@@ -115,7 +129,6 @@ const UserPanel: FC = () => {
       postcode !== user!.postcode &&
       streetAndNumber !== user!.street
     ) {
-      dispatch(setLoading(true));
       geocodeByAddress(`${town}, ${streetAndNumber}`).then((results) => {
         getLatLng(results[0]).then((latLng) => {
           const locationLatLng = { lat: latLng.lat, lng: latLng.lng };
@@ -132,7 +145,6 @@ const UserPanel: FC = () => {
         setChangingAddressAlert2(true);
       } else {
         setAlertTwoDisplayOneTime(true);
-        dispatch(setLoading(true));
         geocodeByAddress(`${town}, ${streetAndNumber}`).then((results) => {
           getLatLng(results[0]).then((latLng) => {
             const locationLatLng = { lat: latLng.lat, lng: latLng.lng };
@@ -147,12 +159,10 @@ const UserPanel: FC = () => {
     ) {
       setChangingAddressAlert1(true);
     } else if (email !== user!.email || name !== user!.name) {
-      dispatch(setLoading(true));
       if (user!.location) {
         updateDetails(user!.location);
       }
     } else if (JSON.stringify(user!.products) !== JSON.stringify(newProducts)) {
-      dispatch(setLoading(true));
       if (user!.location) {
         updateDetails(user!.location);
       }
@@ -262,6 +272,13 @@ const UserPanel: FC = () => {
                   msg={
                     "Musisz wprowadzić zmiany w danych osobowych albo towarach."
                   }
+                />
+              )}
+              {emailAlertDisplayOneTime && (
+                <AlertMessage
+                  type={"danger"}
+                  heading={"chcesz zmienić e-mail?"}
+                  msg={"Jeżeli jesteś tego 100% pewny zatwierdź ponownie."}
                 />
               )}
               <Row className="userPanel__contact-details-wrapper">

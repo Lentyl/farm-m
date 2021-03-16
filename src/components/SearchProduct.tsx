@@ -58,8 +58,8 @@ const SearchProduct: FC = () => {
       <Container className="search__container" fluid>
         {sellersArr.length < 1 ? (
           <h2 className="search__title">
-            Wyszukaj okazje!! Pamiętaj aby używać liczby pojedynczej (cebula,
-            truskawka, marchewka).
+            Wyszukaj okazje! Używaj liczby pojedynczej (cebula, truskawka,
+            marchewka).
           </h2>
         ) : !dysplayDetails ? (
           <ListGroup className="search__list">
@@ -167,6 +167,7 @@ const SearchProduct: FC = () => {
                 <Map
                   mapType={google.maps.MapTypeId.ROADMAP}
                   locationLatLng={sellersArr[chosenSeller].location}
+                  startAddress={true}
                 />
               )}
             </div>

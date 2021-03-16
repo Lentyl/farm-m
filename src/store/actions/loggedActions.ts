@@ -192,11 +192,12 @@ export const getSellerOrderDetails = (
 }
 
 export const updateUser = (
-    user:User
+    user:User,
+    email: boolean = false
 ): ThunkAction<void, RootState, null, LoggedActions> => {
 
     return async (dispatch) => {
-        dispatch(setLoading(false))
+        
        
       try {
              await firebase
@@ -220,10 +221,27 @@ export const updateUser = (
                       })
                     dispatch(setLoading(false))
                 })
+
             
         } catch (err) {
             console.log(err);
         } 
+
+        if(email){
+
+           
+            try {
+             
+                admin
+                    .updateUser(user.id, {
+                    email: "modifiedUser@example.com"
+                  });
+   
+           } catch (err) {
+               console.log(err);
+           } 
+
+        }
     }
 
 }

@@ -1,14 +1,17 @@
 import React, { FC, useEffect } from "react";
 import { Carousel } from "react-bootstrap";
-import carrots from "../assets/img/carrots.jpg";
-import vegetables from "../assets/img/vegetables.jpg";
+
 import SearchProducts from "../components/SearchProduct";
 import { updateUrl } from "../store/actions/loggedActions";
 import { useDispatch } from "react-redux";
 import potatoes_1980 from "../assets/img/potatoes-1980x1584.jpg";
 import potatoes_1280 from "../assets/img/potatoes-1280x1024.jpg";
 import potatoes_800 from "../assets/img/potatoes-800x640.jpg";
-import potatoes_460 from "../assets/img/potatoes-460x536.jpg";
+import potatoes_460 from "../assets/img/potatoes-460x600.jpg";
+import carrots_460 from "../assets/img/carrots-460x600.jpg";
+import carrots from "../assets/img/carrots.jpg";
+import vegetables_460 from "../assets/img/vegetables-460x600.jpg";
+import vegetables from "../assets/img/vegetables.jpg";
 
 const MainPage: FC = () => {
   const dispatch = useDispatch();
@@ -29,41 +32,50 @@ const MainPage: FC = () => {
             <picture>
               <source media="(min-width:1280px)" srcSet={potatoes_1980} />
               <source media="(min-width:800px)" srcSet={potatoes_1280} />
-              <source media="(min-width:460px)" srcSet={potatoes_800} />
+              <source media="(min-width:480px)" srcSet={potatoes_800} />
               <source media="(min-width:0)" srcSet={potatoes_460} />
               <img
                 className="main-page__carusel-img d-block w-100 "
                 src={potatoes_1980}
-                alt="Half face of a man with dark background"
+                alt="Mnóstwo kartofli z wbitą w nie szpachla do nabierania."
               />
             </picture>
-            <Carousel.Caption>
-              <h3>First slide label</h3>
-              <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+            <Carousel.Caption className="main-page__carusel-header-container">
+              <h3 className="main-page__carusel-header">20% taniej</h3>
             </Carousel.Caption>
           </Carousel.Item>
           <Carousel.Item className="main-page__carusel-item">
-            <img
-              className="main-page__carusel-img d-block w-100 "
-              src={carrots}
-              alt="Third slide"
-            />
-            <Carousel.Caption>
-              <h3>Second slide label</h3>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            <picture>
+              <source media="(min-width:1280px)" srcSet={carrots} />
+              <source media="(min-width:800px)" srcSet={carrots} />
+              <source media="(min-width:480px)" srcSet={carrots} />
+              <source media="(min-width:0)" srcSet={carrots_460} />
+              <img
+                className="main-page__carusel-img d-block w-100 "
+                src={carrots}
+                alt="pęczek marchewki leżący na podłodze i inne warzywa w miskach papryczki ogórki"
+              />
+            </picture>
+            <Carousel.Caption className="main-page__carusel-header-container">
+              <h3 className="main-page__carusel-header">ścinamy ceny 30%</h3>
             </Carousel.Caption>
           </Carousel.Item>
           <Carousel.Item className="main-page__carusel-item">
-            <img
-              className="main-page__carusel-img d-block w-100 "
-              src={vegetables}
-              alt="Third slide"
-            />
-            <Carousel.Caption>
-              <h3>Third slide label</h3>
-              <p>
-                Praesent commodo cursus magna, vel scelerisque nisl consectetur.
-              </p>
+            <picture>
+              <source media="(min-width:1280px)" srcSet={vegetables} />
+              <source media="(min-width:800px)" srcSet={vegetables} />
+              <source media="(min-width:480px)" srcSet={vegetables} />
+              <source media="(min-width:0)" srcSet={vegetables_460} />
+              <img
+                className="main-page__carusel-img d-block w-100 "
+                src={vegetables}
+                alt="potatoes with shovel between them."
+              />
+            </picture>
+            <Carousel.Caption className="main-page__carusel-header-container">
+              <h3 className="main-page__carusel-header">
+                brukselka 40% taniej
+              </h3>
             </Carousel.Caption>
           </Carousel.Item>
         </Carousel>

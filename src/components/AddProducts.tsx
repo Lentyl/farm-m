@@ -24,7 +24,7 @@ const AddProducts: FC<IAddProductsProps> = ({ getProducts }) => {
   const { url } = useSelector((state: RootState) => state.logged);
 
   useEffect(() => {
-    if (url === "/business-sign-up") {
+    if (url === "/business-sign-up" || url === "/user") {
       if (user!.products) {
         setProducts(user!.products);
       }

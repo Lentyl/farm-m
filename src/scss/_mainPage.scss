@@ -8,6 +8,7 @@
   .main-page {
     position: relative;
     min-width: 100%;
+    overflow: hidden;
 
     .main-page__transition {
       position: absolute;
@@ -25,10 +26,25 @@
     .main-page__search-container {
       overflow: auto;
       left: 10%;
-      height: 60%;
+      height: 90vw;
       width: 80%;
       position: absolute;
       z-index: 1;
+      @media screen and (min-width: map-get($breakpoins, xs)) {
+        height: 104vw;
+      }
+      @media screen and (min-width: map-get($breakpoins, sm)) {
+        height: 62vw;
+      }
+      @media screen and (min-width: map-get($breakpoins, md)) {
+        height: 68vw;
+      }
+      @media screen and (min-width: map-get($breakpoins, lg)) {
+        height: 68vw;
+      }
+      @media screen and (min-width: map-get($breakpoins, xl)) {
+        height: 88vw;
+      }
     }
 
     .carousel-control-prev {
@@ -40,9 +56,20 @@
 
     .main-page__carusel-img {
       position: relative;
-      height: 150vh;
-      @media screen and (min-width: map-get($breakpoins, sm)) {
+
+      /*      @media screen and (min-width: map-get($breakpoins, sm)) {
         height: 100%;
+      } */
+    }
+
+    .main-page__carusel-header {
+      font-size: 24px;
+
+      @media screen and (min-width: map-get($breakpoins, lg)) {
+        font-size: 30px;
+      }
+      @media screen and (min-width: map-get($breakpoins, xl)) {
+        font-size: 36px;
       }
     }
   }
