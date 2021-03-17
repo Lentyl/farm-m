@@ -22,11 +22,11 @@
 
   .sign-up__container {
     padding: 10px;
-    background-color: rgba(255, 255, 255, 0.5);
+    background: linear-gradient(135deg, rgba(255, 255, 255, .5) 0%, rgba(255, 255, 255, 0.6) 75%, rgba(255, 255, 255, 1) 100%);
     margin: 100px auto;
     position: relative;
-    margin-top: 250px;
     width: 90%;
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
 
     .sign-up__business-form-row {
       margin: 20px 0;

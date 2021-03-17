@@ -21,7 +21,7 @@ const ForgotPassword: FC = () => {
   return (
     <div className="forgot-password">
       <Container className="forgot-password__container">
-        <h2 className="forgot-password__header">Reset password</h2>
+        <h2 className="forgot-password__header">Reset hasła</h2>
         <Form
           className="forgot-password__form-container"
           onSubmit={submitHandler}

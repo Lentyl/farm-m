@@ -115,7 +115,7 @@ const Cart: FC = () => {
   };
 
   return (
-    <div className="cart">
+    <div className={`cart ${orderSum ? "" : "background"}`}>
       <Container className="cart__container" fluid>
         <Form>
           <ListGroup className="cart__list-container">
@@ -149,18 +149,22 @@ const Cart: FC = () => {
                   </ListGroup.Item>
                 );
               })}
-            <ListGroup.Item className="cart__list-item">
-              {orderSum !== 0
-                ? `Łączna kwota: ${
-                    payment === "cashOnDelivery" && delivery === "courier"
-                      ? orderSum + 10 + 20
-                      : payment === "cashOnDelivery"
-                      ? orderSum + 10
-                      : delivery === "courier"
-                      ? orderSum + 20
-                      : orderSum
-                  } zł`
-                : `Dodaj produkt do koszyka.`}
+            <ListGroup.Item className="cart__list-item empty-cart-header">
+              {orderSum ? (
+                `Łączna kwota: ${
+                  payment === "cashOnDelivery" && delivery === "courier"
+                    ? orderSum + 10 + 20
+                    : payment === "cashOnDelivery"
+                    ? orderSum + 10
+                    : delivery === "courier"
+                    ? orderSum + 20
+                    : orderSum
+                } zł`
+              ) : (
+                <h3 className="cart__empty-cart-header">
+                  Twój koszyk jest pusty!
+                </h3>
+              )}
             </ListGroup.Item>
           </ListGroup>
           {orderSum !== 0 && (

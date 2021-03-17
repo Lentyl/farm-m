@@ -1,3 +1,26 @@
+.cart.background{
+  position: absolute;
+  background-image: url("../assets/img/cart-480.jpg");
+  background-size: cover;
+  background-position: top;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
+
+
+  @media screen and (min-width: map-get($breakpoins, md)) {
+    background-image: url("../assets/img/cart-640.jpg");
+  }
+
+  @media screen and (min-width: map-get($breakpoins, lg)) {
+    background-image: url("../assets/img/cart-1280.jpg");
+  }
+
+  @media screen and (min-width: map-get($breakpoins, xl)) {
+    background-image: url("../assets/img/cart-1980.jpg");
+  }
+
+}
 .cart__container {
   .alertMsg {
     position: sticky;
@@ -8,6 +31,33 @@
 
   .cart__list-container {
     margin-top: 10px;
+
+    .cart__list-item.empty-cart-header{
+      background-color: transparent;
+      .cart__empty-cart-header{
+        font-size: 22px;
+        text-align: center;
+          color: $main-color;
+          background-color: rgba(0, 0, 0, 0.4);
+          padding: 6px 5px;
+
+          @media screen and (min-width: map-get($breakpoins, sm)) {
+          font-size: 26px;
+          }
+          @media screen and (min-width: map-get($breakpoins, md)) {
+           font-size: 28px;
+          }
+        
+          @media screen and (min-width: map-get($breakpoins, lg)) {
+            font-size: 28px;
+          }
+        
+          @media screen and (min-width: map-get($breakpoins, xl)) {
+            font-size: 32px;
+            margin-left: 90px;
+          }
+      }
+    }
 
     .cart__list-item {
       border: none;
