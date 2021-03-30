@@ -6,7 +6,6 @@ import { updateUrl } from "../store/actions/loggedActions";
 import { RootState } from "../store";
 import AddProducts from "../components/AddProducts";
 import { Product, LocationLatLng } from "../store/uiData/dataTypes";
-
 import Map from "../components/Map";
 
 const Business: FC = () => {

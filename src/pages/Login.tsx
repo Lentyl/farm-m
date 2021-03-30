@@ -10,7 +10,6 @@ const Login: FC = () => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
-
   const { authentication } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
 

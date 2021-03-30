@@ -1,5 +1,12 @@
-
-import { SET_USER, SET_BUSINESS_USER, SET_SUCCESS, SET_AUTHENTICATION, SIGN_OUT, InitialAutgState, AuthAction } from "../types";
+import {
+  SET_USER,
+  SET_BUSINESS_USER,
+  SET_SUCCESS,
+  SET_AUTHENTICATION,
+  SIGN_OUT,
+  InitialAutgState,
+  AuthAction,
+} from "../types";
 
 const initialState: InitialAutgState = {
   user: null,
@@ -8,7 +15,6 @@ const initialState: InitialAutgState = {
 };
 
 export default (state = initialState, action: AuthAction): InitialAutgState => {
-
   switch (action.type) {
     case SET_USER:
       return {
@@ -26,16 +32,16 @@ export default (state = initialState, action: AuthAction): InitialAutgState => {
         authentication: false,
       };
     case SET_SUCCESS:
-        return {
-          ...state,
-          success: action.data,
-        };
+      return {
+        ...state,
+        success: action.data,
+      };
     case SET_AUTHENTICATION:
       return {
         ...state,
-        ...action.data
-      }
+        ...action.data,
+      };
     default:
       return state;
   }
-}; 
+};

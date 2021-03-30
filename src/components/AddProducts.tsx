@@ -4,7 +4,6 @@ import { Form, Button, Col, Container, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import ProductAutocomplete from "../components/ProductAutocomplete";
-
 import AlertMessage from "./AlertMessage";
 
 interface IAddProductsProps {
@@ -18,7 +17,6 @@ const AddProducts: FC<IAddProductsProps> = ({ getProducts }) => {
   const [capacity, setCapacity] = useState<number>(0);
   const [addingAlert, setAddingAlert] = useState(false);
   const [productChosen, setProductChosen] = useState(false);
-
   const { user } = useSelector((state: RootState) => state.auth);
   const { url } = useSelector((state: RootState) => state.logged);
 

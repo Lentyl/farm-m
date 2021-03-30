@@ -27,10 +27,8 @@ const Header: React.FC = () => {
   const [searchInputDisplay, setSearchInputDisplay] = useState(false);
   const [loading, setLoading] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
-
   let { authentication } = useSelector((state: RootState) => state.auth);
   const { cartAmount, url } = useSelector((state: RootState) => state.logged);
-
   const dispatch = useDispatch();
 
   useEffect(() => {

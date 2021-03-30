@@ -1,5 +1,12 @@
 import React, { FC, useEffect, useState, FormEvent } from "react";
-import { Container, ListGroup, Button, Spinner, Form } from "react-bootstrap";
+import {
+  Container,
+  ListGroup,
+  Button,
+  Spinner,
+  Form,
+  Row,
+} from "react-bootstrap";
 import { Order } from "../store/uiData/dataTypes";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
@@ -30,10 +37,8 @@ const Cart: FC = () => {
   const [telephoneValid, setTelephoneValid] = useState(false);
   const [loading, setLoading] = useState(false);
   const [orderSent, setOrderSent] = useState(false);
-
   const { order } = useSelector((state: RootState) => state.logged);
   const { user } = useSelector((state: RootState) => state.auth);
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -390,19 +395,21 @@ const Cart: FC = () => {
                     />
                   </Form.Label>
                 </Form.Group>
-                <Button
-                  className="cart__order-btn"
-                  variant="outline-success"
-                  type="submite"
-                  size="sm"
-                  onClick={orderSubmitHandler}
-                >
-                  {loading ? (
-                    <Spinner animation="border" variant="primary" size="sm" />
-                  ) : (
-                    "Zamów"
-                  )}
-                </Button>
+                <Row className="cart__order-btn-container">
+                  <Button
+                    className="cart__order-btn"
+                    variant="outline-success"
+                    type="submite"
+                    size="sm"
+                    onClick={orderSubmitHandler}
+                  >
+                    {loading ? (
+                      <Spinner animation="border" variant="primary" size="sm" />
+                    ) : (
+                      "Zamów"
+                    )}
+                  </Button>
+                </Row>
               </div>
             )}
           </Form>

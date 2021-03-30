@@ -12,9 +12,7 @@ const SignUp: FC = () => {
   const [email, setEmail] = useState("");
   const [permission, setPermission] = useState(false);
   const [loading, setLoading] = useState(false);
-
   const { authentication } = useSelector((state: RootState) => state.auth);
-
   const dispatch = useDispatch();
 
   useEffect(() => {

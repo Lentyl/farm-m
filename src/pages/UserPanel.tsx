@@ -41,10 +41,8 @@ const UserPanel: FC = () => {
   const [emailAlertDisplayOneTime, setEmailAlertDisplayOneTime] = useState(
     false
   );
-
   const { allOrders } = useSelector((state: RootState) => state.logged);
   const { user } = useSelector((state: RootState) => state.auth);
-
   const dispatch = useDispatch();
 
   useEffect(() => {

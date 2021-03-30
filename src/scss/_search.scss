@@ -127,22 +127,20 @@
         width: 98%;
 
         .search__details-col {
-          padding: 0;
-          margin-right: 10px;
+          min-width: 100px;
         }
 
-        .search__details-col:nth-child(1) {
-          min-width: 150px;
-          text-align: left;
-        }
         .search__details-col:nth-child(4) {
+          right: 4px;
+          position: relative;
           min-width: 100px;
           height: 40px;
-        }
-
-        .search__add-item-btn {
-          position: absolute;
-          right: 6px;
+          .search__add-item-btn {
+            min-width: 100px;
+            top: 8px;
+            right: 0%;
+            position: absolute;
+          }
         }
       }
 

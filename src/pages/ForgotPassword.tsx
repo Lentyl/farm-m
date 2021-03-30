@@ -1,13 +1,11 @@
-import React, { FC, useState, FormEvent, useEffect } from "react";
+import React, { FC, useState, FormEvent } from "react";
 import { Button, Container, Form, Spinner } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { sendPasswordResetEmail } from "../store/actions/authAction";
-import { RootState } from "../store";
 
 const ForgotPassword: FC = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
-
   const dispatch = useDispatch();
 
   const submitHandler = async (e: FormEvent) => {

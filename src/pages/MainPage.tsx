@@ -1,6 +1,5 @@
 import React, { FC, useEffect } from "react";
 import { Carousel } from "react-bootstrap";
-
 import SearchProducts from "../components/SearchProduct";
 import { updateUrl } from "../store/actions/loggedActions";
 import { useDispatch } from "react-redux";

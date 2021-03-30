@@ -4,7 +4,6 @@ import { SellersArr } from "../store/uiData/dataTypes";
 import { RootState } from "../store";
 import { FaShoppingCart } from "react-icons/fa";
 import Map from "../components/Map";
-
 import { useDispatch, useSelector } from "react-redux";
 import { setOrder } from "../store/actions/loggedActions";
 
@@ -12,7 +11,6 @@ const SearchProduct: FC = () => {
   const [sellersArr, setSellersArr] = useState<SellersArr>([]);
   const [dysplayDetails, setDysplayDetails] = useState(false);
   const [chosenSeller, setChosenSeller] = useState(0);
-
   const { mapLoaded } = useSelector((state: RootState) => state.logged);
   const { sellersProducts } = useSelector((state: RootState) => state.logged);
   let { authentication } = useSelector((state: RootState) => state.auth);
@@ -133,7 +131,7 @@ const SearchProduct: FC = () => {
               {sellersArr[chosenSeller].products.map((product, i) => (
                 <Row key={i} className="search__product-details">
                   <Col className="search__details-col" sm="auto">
-                    produkt: {product.name}
+                    {product.name}
                   </Col>
                   <Col className="search__details-col" sm="auto">
                     cena: {product.price} zł

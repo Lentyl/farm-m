@@ -26,15 +26,13 @@ interface IDateProps {
 
 const OrderDetails: FC<RouteComponentProps<IDateProps>> = (props) => {
   const { date } = props.match.params;
-
   const [sellerDetails, setSellerDetails] = useState(false);
   const [order, setOrder] = useState<FullOrder>();
-
+  const [loadingBtn, setLoadingBtn] = useState(false);
   const { user } = useSelector((state: RootState) => state.auth);
   const { loading, allOrders } = useSelector(
     (state: RootState) => state.logged
   );
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -57,14 +55,23 @@ const OrderDetails: FC<RouteComponentProps<IDateProps>> = (props) => {
   }, [allOrders]);
 
   const sellerDetailsHandler = () => {
-    dispatch(getSellerOrderDetails(order!.merchandise[0].sellerId));
+    setLoadingBtn(true);
+    dispatch(
+      getSellerOrderDetails(order!.merchandise[0].sellerId, () =>
+        setLoadingBtn(false)
+      )
+    );
     setSellerDetails(true);
   };
 
   return (
     <div className="order-details">
       {loading ? (
-        <Spinner animation="border" variant="primary" />
+        <Spinner
+          className="order-details__spiner"
+          animation="border"
+          variant="primary"
+        />
       ) : order ? (
         <Container>
           <Card className="order-details__card">
@@ -106,7 +113,11 @@ const OrderDetails: FC<RouteComponentProps<IDateProps>> = (props) => {
                   size="sm"
                   onClick={sellerDetailsHandler}
                 >
-                  dane sprzedawcy
+                  {loadingBtn ? (
+                    <Spinner animation="border" variant="primary" />
+                  ) : (
+                    "dane sprzedawcy"
+                  )}
                 </Button>
               </Row>
             </Card.Body>
