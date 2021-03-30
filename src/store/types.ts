@@ -1,13 +1,8 @@
-
-import { FullOrder, Order, Product, Seller, SellersArr, LocationLatLng, SellerOrderDetails, User } from './uiData/dataTypes'
-
-
-
+import { FullOrder, Order, Product, SellersArr, LocationLatLng, SellerOrderDetails, User } from './uiData/dataTypes'
 
 export const SET_USER = "SET_USER";
 export const SET_BUSINESS_USER = "SET_BUSINESS_USER";
 export const SIGN_OUT = "SIGN_OUT";
-export const SET_ERROR = "SET_ERROR";
 export const NEED_VERIFICATION = "NEED_VERIFICATION";
 export const SET_SUCCESS = "SET_SUCCESS";
 export const SET_AUTHENTICATION = "SET_AUTHENTICATION";
@@ -40,7 +35,6 @@ export interface AuthenticationData {
 //initial State
 export interface InitialAutgState {
   user: User | null;
-  error: string;
   authentication: boolean;
   success: string
 }
@@ -60,12 +54,6 @@ interface SignOutAction {
   type: typeof SIGN_OUT;
 }
 
-interface SetErrorAction {
-  type: typeof SET_ERROR
-  data: string
-}
-
-
 interface setAuthentication {
   type: typeof SET_AUTHENTICATION
   data: AuthenticationData
@@ -81,7 +69,6 @@ export type AuthAction =
   | SetBusinessUserAction
   | SignOutAction
   | SetSuccessAction
-  | SetErrorAction
   | setAuthentication;
   
 

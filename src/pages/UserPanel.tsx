@@ -16,7 +16,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
 import {
   getAllOrders,
-  setLoading,
   updateUser,
   updateUrl,
 } from "../store/actions/loggedActions";
@@ -34,6 +33,7 @@ const UserPanel: FC = () => {
   const [town, setTown] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const [changingAddressAlert1, setChangingAddressAlert1] = useState(false);
   const [changingAddressAlert2, setChangingAddressAlert2] = useState(false);
   const [changingDetailsAlert3, setChangingDetailsAlert3] = useState(false);
@@ -42,20 +42,20 @@ const UserPanel: FC = () => {
     false
   );
 
-  const { allOrders, loading } = useSelector(
-    (state: RootState) => state.logged
-  );
+  const { allOrders } = useSelector((state: RootState) => state.logged);
   const { user } = useSelector((state: RootState) => state.auth);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(setLoading(true));
     dispatch(updateUrl(window.location.pathname));
   }, []);
 
   useEffect(() => {
-    if (user) dispatch(getAllOrders(user!.id));
+    if (user) {
+      dispatch(getAllOrders(user!.id));
+      setLoading(false);
+    }
   }, [user]);
 
   const handleEditDetails = () => {
@@ -185,7 +185,9 @@ const UserPanel: FC = () => {
         <Spinner animation="border" variant="primary" />
       ) : allOrders.length === 0 ? (
         <Container className="userPanel__container">
-          <h2>{user?.name} nie masz żadnych zamówień.</h2>
+          <h2 className="userPanel__header">
+            {user?.name} nie masz żadnych zamówień.
+          </h2>
         </Container>
       ) : (
         <Container className="userPanel__container">
@@ -217,7 +219,7 @@ const UserPanel: FC = () => {
                         łączna kwota: {order.totalValue} zł
                       </ListGroup.Item>
                       <ListGroup.Item className="list-group-flush">
-                        data: {order.date.slice(1).replace("t", ":")}
+                        data: {order.date.replace("t", ":")}
                       </ListGroup.Item>
                     </ListGroup>
                   </Col>
@@ -392,9 +394,9 @@ const UserPanel: FC = () => {
               <h4>Twoje Produkty</h4>
               {user.products!.map((product, i) => (
                 <Row className="userPanel__product-details" key={i}>
-                  <Col>{product.name}: </Col>
-                  <Col>{product.price} zł/szt</Col>
-                  <Col>1 szt - {product.capacity} kg</Col>
+                  <Col sm="3">{product.name}: </Col>
+                  <Col sm="3">{product.price} zł/szt</Col>
+                  <Col sm="3">1 szt - {product.capacity} kg</Col>
                 </Row>
               ))}
             </div>

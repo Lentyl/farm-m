@@ -14,7 +14,7 @@ import { RootState } from "../store";
 import { useDispatch, useSelector } from "react-redux";
 import { getProducts } from "../store/actions/loggedActions";
 import {
-  signout,
+  signOut,
   authenticationSetup,
   setUser,
 } from "../store/actions/authAction";
@@ -26,6 +26,7 @@ const Header: React.FC = () => {
   const [searchValue, setSearchValue] = useState("");
   const [searchInputDisplay, setSearchInputDisplay] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [searchLoading, setSearchLoading] = useState(false);
 
   let { authentication } = useSelector((state: RootState) => state.auth);
   const { cartAmount, url } = useSelector((state: RootState) => state.logged);
@@ -54,13 +55,14 @@ const Header: React.FC = () => {
 
   const logoutHandler = (): void => {
     setLoading(true);
-    dispatch(signout());
+    dispatch(signOut());
   };
 
   const submitHandler = (e: React.FormEvent) => {
     e.preventDefault();
-    const search = searchValue.toLowerCase();
-    dispatch(getProducts(search));
+    setSearchLoading(true);
+    const search = searchValue;
+    dispatch(getProducts(search, () => setSearchLoading(false)));
   };
 
   const getSelectedProduct = (product: string) => {
@@ -155,7 +157,11 @@ const Header: React.FC = () => {
                 variant="outline-success"
                 type="submit"
               >
-                Szukaj
+                {searchLoading ? (
+                  <Spinner animation="border" variant="primary" size="sm" />
+                ) : (
+                  "Szukaj"
+                )}
               </Button>
             </Form>
           )}

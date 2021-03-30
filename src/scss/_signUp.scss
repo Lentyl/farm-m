@@ -5,7 +5,6 @@
   background-repeat: no-repeat;
   position: absolute;
   width: 100%;
-  top: 0;
   min-height: 100%;
 
   @media screen and (min-width: map-get($breakpoins, md)) {
@@ -22,8 +21,13 @@
 
   .sign-up__container {
     padding: 10px;
-    background: linear-gradient(135deg, rgba(255, 255, 255, .5) 0%, rgba(255, 255, 255, 0.6) 75%, rgba(255, 255, 255, 1) 100%);
-    margin: 100px auto;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.5) 0%,
+      rgba(255, 255, 255, 0.6) 75%,
+      rgba(255, 255, 255, 1) 100%
+    );
+    margin: 50px auto;
     position: relative;
     width: 90%;
     box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;

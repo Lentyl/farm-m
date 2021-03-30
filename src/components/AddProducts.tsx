@@ -7,8 +7,6 @@ import ProductAutocomplete from "../components/ProductAutocomplete";
 
 import AlertMessage from "./AlertMessage";
 
-type FormElement = React.FormEvent<HTMLFormElement>;
-
 interface IAddProductsProps {
   getProducts: (products: Product[]) => void;
 }
@@ -19,6 +17,7 @@ const AddProducts: FC<IAddProductsProps> = ({ getProducts }) => {
   const [price, setPrice] = useState<number>(0);
   const [capacity, setCapacity] = useState<number>(0);
   const [addingAlert, setAddingAlert] = useState(false);
+  const [productChosen, setProductChosen] = useState(false);
 
   const { user } = useSelector((state: RootState) => state.auth);
   const { url } = useSelector((state: RootState) => state.logged);
@@ -32,10 +31,11 @@ const AddProducts: FC<IAddProductsProps> = ({ getProducts }) => {
   }, []);
 
   const getSelectedProduct = (selectedProduct: string) => {
-    setName(selectedProduct);
+    setName(selectedProduct.toLowerCase());
+    setProductChosen(false);
   };
 
-  const handleConfirm = (): void => {
+  const handleAdd = (): void => {
     const newList: Product[] = [...products, { name, price, capacity }];
     if (
       name.length !== 0 &&
@@ -48,7 +48,9 @@ const AddProducts: FC<IAddProductsProps> = ({ getProducts }) => {
       setName("");
       setPrice(0);
       setCapacity(0);
+      setProductChosen(true);
       getProducts(newList);
+      setProductChosen(true);
     } else {
       setAddingAlert(true);
     }
@@ -57,13 +59,8 @@ const AddProducts: FC<IAddProductsProps> = ({ getProducts }) => {
     const newList: Product[] = [...products];
     newList.splice(index, 1);
     setProducts(newList);
-
     getProducts(newList);
   };
-
-  const submitHandler = (e: FormElement) => {};
-
-  const reset = () => {};
 
   return (
     <div className="add_product">
@@ -79,7 +76,7 @@ const AddProducts: FC<IAddProductsProps> = ({ getProducts }) => {
             }
           />
         )}
-        <Form onSubmit={submitHandler}>
+        <Form>
           <Form.Row className="add_product__add-row">
             <Form.Group
               className="add-product__input-container"
@@ -88,7 +85,10 @@ const AddProducts: FC<IAddProductsProps> = ({ getProducts }) => {
               controlId="validationCustom01"
             >
               <Form.Label>produkt</Form.Label>
-              <ProductAutocomplete getSelectedProduct={getSelectedProduct} />
+              <ProductAutocomplete
+                getSelectedProduct={getSelectedProduct}
+                productChosen={productChosen}
+              />
               <Form.Control.Feedback>Wygląda dobrze!</Form.Control.Feedback>
             </Form.Group>
             <Form.Group
@@ -106,7 +106,6 @@ const AddProducts: FC<IAddProductsProps> = ({ getProducts }) => {
                 min="0"
                 required
                 placeholder="zł"
-                onFocus={reset}
                 onChange={(e) => setPrice(e.currentTarget.valueAsNumber)}
               />
               <Form.Control.Feedback>Wygląda dobrze!</Form.Control.Feedback>
@@ -127,7 +126,6 @@ const AddProducts: FC<IAddProductsProps> = ({ getProducts }) => {
                 step="1"
                 required
                 placeholder="kg"
-                onFocus={reset}
                 onChange={(e) => setCapacity(e.currentTarget.valueAsNumber)}
               />
               <Form.Control.Feedback>Wygląda dobrze!</Form.Control.Feedback>
@@ -141,7 +139,7 @@ const AddProducts: FC<IAddProductsProps> = ({ getProducts }) => {
               <Button
                 className="add-product__btn"
                 variant="outline-success"
-                onClick={handleConfirm}
+                onClick={handleAdd}
               >
                 Dodaj
               </Button>

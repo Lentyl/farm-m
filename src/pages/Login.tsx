@@ -12,23 +12,16 @@ const Login: FC = () => {
   const [loading, setLoading] = useState(false);
 
   const { authentication } = useSelector((state: RootState) => state.auth);
-
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(updateUrl(window.location.pathname));
   }, []);
 
-  useEffect(() => {
-    if (authentication) {
-      setLoading(false);
-    }
-  }, [authentication]);
-
   const submitHandler = (e: FormEvent): void => {
     e.preventDefault();
     setLoading(true);
-    dispatch(login({ email, password }));
+    dispatch(login({ email, password }, () => setLoading(false)));
     setPassword("");
     setEmail("");
   };

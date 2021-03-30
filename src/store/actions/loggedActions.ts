@@ -6,7 +6,8 @@ import { Order,Seller, FullOrder, SellerOrderDetails } from "../uiData/dataTypes
 import { User} from "../../store/uiData/dataTypes";
 
 export const getProducts = (
-    searchValue: string
+    searchValue: string,
+    setSearchLoading: ()=>void
 ): ThunkAction<void, RootState, null, LoggedActions> => {
     return async (dispatch) => {
         try {
@@ -14,7 +15,7 @@ export const getProducts = (
             await firebase
                 .firestore()
                 .collection("users")
-                .where('productType', 'array-contains', searchValue)
+                .where('productType', 'array-contains', searchValue.toLocaleLowerCase())
                 .get()
                 .then(snapshot => {
                     
@@ -34,6 +35,7 @@ export const getProducts = (
                             searchedProduct: searchValue,
                         }
                         sellersProducts.push(sellersArr)
+
                     })
                 })
 
@@ -41,9 +43,11 @@ export const getProducts = (
                     type: GET_PRODUCTS,
                     data: sellersProducts,
                 })
+                setSearchLoading();
 
         } catch (err) {
-            console.log(err);
+            alert(err)
+            setSearchLoading();
         }
 
     }
@@ -84,7 +88,9 @@ export const deleteProduct = (
 }
 
 export const makeOrder = (
-    order: FullOrder
+    order: FullOrder,
+    setLoading: ()=>void,
+    orderSent: ()=>void
 ): ThunkAction<void, RootState, null, LoggedActions> => {
 
     return async (dispatch) => {
@@ -95,11 +101,14 @@ export const makeOrder = (
                 .doc(order.date)
                 .set(order)
                 .then(()=>{
-                    dispatch(setLoading(false))
+                    setLoading()
+                    orderSent()
+                    dispatch(deleteProduct('all'))
                 })
             
         } catch (err) {
-            console.log(err);
+            alert(err)
+            setLoading();
         }
     }
 
@@ -141,7 +150,7 @@ export const getAllOrders = (
                 })  
 
         })} catch (err) {
-            console.log(err);
+            alert(err)
         }
     }
 }
@@ -149,8 +158,6 @@ export const getSellerOrderDetails = (
     uid:string
 ): ThunkAction<void, RootState, null, LoggedActions> => {
 
-
-  
     return async (dispatch) => {
 
         try {
@@ -186,7 +193,7 @@ export const getSellerOrderDetails = (
             })
 
         } catch (err) {
-            console.log(err);
+            alert(err)
         }
     }
 }
@@ -212,6 +219,7 @@ export const updateUser = (
                   postcode: user.postcode,
                   city: user.city,
                   street: user.street,
+                  productType: user.products!.map(product => product.name),
                   products: user.products,
                   location: user.location,
                 })
@@ -226,14 +234,11 @@ export const updateUser = (
 
             
         } catch (err) {
-            console.log(err);
+            alert(err)
         } 
 
         if(email){
-
             const cUser = firebase.auth().currentUser
-
-            console.log(cUser!.email, password );
 
             if(cUser!.email && password){
                 console.log('coś tam');
@@ -259,26 +264,13 @@ export const updateUser = (
 
                             
                 } catch (err) {
-                console.log(err);
+                alert(err)
                 } 
             }
         }
     }
 }
                 
-/*                   if(!!cUser){
-                    cUser.updateEmail(user.email).then(function() {
-                        console.log("Update successful.");
-                      }).catch(function(error) {
-                        console.log(error);
-                      });
-                     } 
-            
-      
-
-        }
-}
-*/
 
 
 export const updateUrl = (

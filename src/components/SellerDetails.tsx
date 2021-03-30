@@ -1,14 +1,6 @@
-import React, { FC, useEffect, useState } from "react";
-import {
-  Container,
-  Card,
-  ListGroup,
-  Row,
-  Col,
-  Spinner,
-  Button,
-} from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
+import React, { FC } from "react";
+import { Card, ListGroup, Row, Col } from "react-bootstrap";
+import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import Map from "../components/Map";
 

@@ -52,7 +52,6 @@
 
   .add-product__list {
     display: flex;
-    flex-direction: column;
     justify-content: center;
     background-color: rgba(255, 255, 255, 0.5);
     margin: 100px auto 0 auto;
@@ -61,14 +60,19 @@
     min-height: 60px;
 
     .add-product__list-item {
+      width: 100%;
       flex-direction: column;
-      @media screen and (min-width: map-get($breakpoins, xs)) {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+
+      @media screen and (min-width: map-get($breakpoins, sm)) {
         flex-direction: row;
       }
 
       .add-product__list-item-element:nth-child(3) {
-        @media screen and (min-width: map-get($breakpoins, xs)) {
-          padding-right: 50px;
+        @media screen and (min-width: map-get($breakpoins, sm)) {
+          text-align: left;
         }
       }
     }

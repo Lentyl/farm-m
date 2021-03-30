@@ -1,7 +1,7 @@
 import React, { FC, FormEvent, useState, useEffect } from "react";
 import { Form, Button, Spinner, Col, Container } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { businessSignup, setError } from "../store/actions/authAction";
+import { businessSignup } from "../store/actions/authAction";
 import { updateUrl } from "../store/actions/loggedActions";
 import { RootState } from "../store";
 import AddProducts from "../components/AddProducts";
@@ -19,33 +19,16 @@ const Business: FC = () => {
   const [permission, setPermission] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
   const [locationLatLng, setlocationLatLng] = useState<LocationLatLng>();
-
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
-  const { authentication, error } = useSelector(
-    (state: RootState) => state.auth
-  );
+  const { authentication } = useSelector((state: RootState) => state.auth);
 
   const { mapLoaded } = useSelector((state: RootState) => state.logged);
 
   useEffect(() => {
     dispatch(updateUrl(window.location.pathname));
   }, []);
-
-  useEffect(() => {
-    return () => {
-      if (error) {
-        dispatch(setError(""));
-      }
-    };
-  }, [error, dispatch]);
-
-  useEffect(() => {
-    if (authentication) {
-      setLoading(false);
-    }
-  }, [authentication]);
 
   const submitHandler = (e: FormEvent): void => {
     e.preventDefault();

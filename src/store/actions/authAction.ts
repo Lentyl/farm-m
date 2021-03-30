@@ -1,14 +1,14 @@
 
 import { ThunkAction } from "redux-thunk";
-import { AuthAction, SET_AUTHENTICATION, SET_USER, SET_BUSINESS_USER,SET_SUCCESS, SET_ERROR, SIGN_OUT, SignUpData, BusinessSignUpData, LoginData, AuthenticationData, SET_LOADING } from "../types";
+import { AuthAction, SET_AUTHENTICATION, SET_USER, SET_BUSINESS_USER,SET_SUCCESS, SIGN_OUT, SignUpData, BusinessSignUpData, LoginData, AuthenticationData} from "../types";
 import { User} from "../../store/uiData/dataTypes";
 import {setLoading} from './loggedActions'
 import { RootState } from "..";
 import firebase from "../../firebase/config";
 
-export const signup = (
+export const signUp = (
   data: SignUpData,
-  onError: () => void
+  setLoading: () => void
 ): ThunkAction<void, RootState, null, AuthAction> => {
 
   return async (dispatch) => {
@@ -38,18 +38,14 @@ export const signup = (
       }
 
       if (res.operationType === 'signIn') {
-        console.log(res.operationType);
         const authentication: boolean = true
         dispatch(authenticationSetup({ authentication }));
+        setLoading()
       }
 
     } catch (err) {
-      console.log(err);
-      onError();
-      dispatch({
-        type: SET_ERROR,
-        data: err.message,
-      })
+      alert(err)
+      setLoading();
     }
 
   }
@@ -58,7 +54,7 @@ export const signup = (
 
 export const businessSignup = (
   data: BusinessSignUpData,
-  onError: () => void
+  setLoading: () => void
 ): ThunkAction<void, RootState, null, AuthAction> => {
 
  const productType = data.products.map(product=>product.name);
@@ -101,22 +97,19 @@ export const businessSignup = (
       if (res.operationType === 'signIn') {
         const authentication: boolean = true
         dispatch(authenticationSetup({ authentication }));
+        setLoading()
       }
 
-
     } catch (err) {
-      console.log(err);
-      onError();
-      dispatch({
-        type: SET_ERROR,
-        data: err.message,
-      })
+      alert(err)
+      setLoading()
     }
   }
 }
 
 export const login = (
   data: LoginData,
+  setLoading: () => void
 ): ThunkAction<void, RootState, null, AuthAction> => {
   return async (dispatch) => {
     try {
@@ -128,20 +121,18 @@ export const login = (
         const authentication: boolean = true
         dispatch(authenticationSetup({ authentication }));
         dispatch(setUser(res.user!.uid))
-        dispatch(setLoading(false))
+        setLoading()
+        
       }
 
     } catch (err) {
-      console.log(err);
-      dispatch({
-        type: SET_ERROR,
-        data: err.message,
-      })
+       alert(err)
+       setLoading()
     }
   }
 }
 
-export const signout = (): ThunkAction<void, RootState, null, AuthAction> => {
+export const signOut = (): ThunkAction<void, RootState, null, AuthAction> => {
   return async (dispatch) => {
     try {
       await firebase.auth().signOut();
@@ -150,23 +141,13 @@ export const signout = (): ThunkAction<void, RootState, null, AuthAction> => {
         type: SIGN_OUT,
       });
     } catch (err) {
-      console.log(err);
+      alert(err)
     }
 
   }
 
 }
 
-export const setError = (
-  msg: string
-): ThunkAction<void, RootState, null, AuthAction> => {
-  return (dispatch) => {
-    dispatch({
-      type: SET_ERROR,
-      data: msg,
-    })
-  }
-}
 
 export const authenticationSetup = (
   authentication: AuthenticationData,
@@ -183,7 +164,7 @@ export const setUser = (
     uid:string
 ): ThunkAction<void, RootState, null, AuthAction> => {
   return async (dispatch) => {
-
+    
     try {
 
        await firebase
@@ -195,6 +176,7 @@ export const setUser = (
         snapshot.docs.map(doc => {
           
           const userDb = doc.data()
+          
 
          const user:User = {
            id: userDb.id,
@@ -208,6 +190,7 @@ export const setUser = (
            location: userDb.location
          }
 
+         
           dispatch({
             type: SET_USER,
             data: user,
@@ -216,8 +199,7 @@ export const setUser = (
 
       })
     }catch (err) {
-      console.log(err);
-      dispatch(setError(err.message));
+      alert(err)
     } 
 
   }
@@ -243,8 +225,7 @@ export const sendPasswordResetEmail = (
       await firebase.auth().sendPasswordResetEmail(email);
        dispatch(setSuccess('email został wysłany'));
     } catch (err) {
-      console.log(err.message);
-    dispatch(setError(err.message)); 
+      alert(err)
     }
   };
 };

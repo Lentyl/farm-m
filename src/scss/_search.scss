@@ -14,15 +14,17 @@
     max-width: 700px;
     box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
     .search__title {
-      font-size: 22px;
+      text-align: center;
+      word-spacing: 2px;
+      font-size: 20px;
       @media screen and (min-width: map-get($breakpoins, xs)) {
-        font-size: 24px;
+        font-size: 22px;
       }
       @media screen and (min-width: map-get($breakpoins, sm)) {
         flex-direction: row;
       }
       @media screen and (min-width: map-get($breakpoins, md)) {
-        font-size: 30px;
+        font-size: 28px;
       }
     }
 
@@ -47,7 +49,13 @@
               flex-direction: row;
             }
             .search__list-item-paragraph-element {
-              margin-bottom: 0;
+              margin: 0;
+              @media screen and (min-width: map-get($breakpoins, md)) {
+                margin: 0 10px 0 0;
+              }
+              @media screen and (min-width: map-get($breakpoins, xl)) {
+                margin: 0 14px 0 0;
+              }
             }
             .search__list-item-paragraph-element:nth-child(1) {
               min-width: 100px;
@@ -121,6 +129,11 @@
         .search__details-col {
           padding: 0;
           margin-right: 10px;
+        }
+
+        .search__details-col:nth-child(1) {
+          min-width: 150px;
+          text-align: left;
         }
         .search__details-col:nth-child(4) {
           min-width: 100px;

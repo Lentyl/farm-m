@@ -98,6 +98,7 @@
       }
 
       .header__search-button {
+        min-width: 72px;
         position: absolute;
         bottom: 0;
         right: 5%;
@@ -147,7 +148,7 @@
     .search {
       top: -80px;
       @media screen and (min-width: map-get($breakpoins, xl)) {
-      top: 0;
+        top: 0;
       }
     }
 

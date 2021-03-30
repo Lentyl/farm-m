@@ -1,5 +1,3 @@
-import { stat } from 'fs';
-import Products from '../../pages/Products';
 import {SET_LOADING,
         initialLoggedState,
         LoggedActions,
@@ -53,11 +51,9 @@ export default (state = initialState, action: LoggedActions): initialLoggedState
 
                 }
 
-
             }
 
             let amount: number = 0
-
 
             data.forEach(element => {
                 amount += element.productQuantity
@@ -94,12 +90,22 @@ export default (state = initialState, action: LoggedActions): initialLoggedState
 
         case DELETE_PRODUCT:
 
-            const afterDeleting:Order[] = state.order.filter(product => product.productName !== action.data);
+          console.log(action.data);
+                 const afterDeleting:Order[] = state.order.filter(product => product.productName !== action.data);
 
-            let amountAfterDeleting: number = 0
-            afterDeleting.forEach(item=>{ 
-                amountAfterDeleting += item.productQuantity
-            })
+                 let amountAfterDeleting: number = 0
+                 afterDeleting.forEach(item=>{ 
+                    amountAfterDeleting += item.productQuantity
+                 })
+
+
+                 if(action.data === 'all'){
+                    afterDeleting.length = 0
+                    amountAfterDeleting = 0
+                 }
+                 
+        
+     
     
             return {
                 ...state,

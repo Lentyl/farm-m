@@ -1,25 +1,25 @@
-.cart.background{
+.cart.background {
   position: absolute;
   background-image: url("../assets/img/cart-480.jpg");
   background-size: cover;
-  background-position: top;
+  background-position: 0 25%;
   background-repeat: no-repeat;
   width: 100%;
   height: 100%;
 
-
-  @media screen and (min-width: map-get($breakpoins, md)) {
+  @media screen and (min-width: map-get($breakpoins, sm)) {
     background-image: url("../assets/img/cart-640.jpg");
+    background-position: 0% 30%;
   }
 
-  @media screen and (min-width: map-get($breakpoins, lg)) {
+  @media screen and (min-width: map-get($breakpoins, md)) {
+    background-position: top;
     background-image: url("../assets/img/cart-1280.jpg");
   }
 
   @media screen and (min-width: map-get($breakpoins, xl)) {
     background-image: url("../assets/img/cart-1980.jpg");
   }
-
 }
 .cart__container {
   .alertMsg {
@@ -32,49 +32,55 @@
   .cart__list-container {
     margin-top: 10px;
 
-    .cart__list-item.empty-cart-header{
+    .cart__list-item.empty-cart-header {
       background-color: transparent;
-      .cart__empty-cart-header{
+      .cart__empty-cart-header {
         font-size: 22px;
         text-align: center;
-          color: $main-color;
-          background-color: rgba(0, 0, 0, 0.4);
-          padding: 6px 5px;
+        color: $main-color;
+        background-color: rgba(0, 0, 0, 0.4);
+        padding: 6px 5px;
 
-          @media screen and (min-width: map-get($breakpoins, sm)) {
+        @media screen and (min-width: map-get($breakpoins, sm)) {
           font-size: 26px;
-          }
-          @media screen and (min-width: map-get($breakpoins, md)) {
-           font-size: 28px;
-          }
-        
-          @media screen and (min-width: map-get($breakpoins, lg)) {
-            font-size: 28px;
-          }
-        
-          @media screen and (min-width: map-get($breakpoins, xl)) {
-            font-size: 32px;
-            margin-left: 90px;
-          }
+        }
+        @media screen and (min-width: map-get($breakpoins, md)) {
+          font-size: 28px;
+        }
+
+        @media screen and (min-width: map-get($breakpoins, lg)) {
+          font-size: 28px;
+        }
+
+        @media screen and (min-width: map-get($breakpoins, xl)) {
+          font-size: 32px;
+          margin-left: 90px;
+        }
       }
     }
 
     .cart__list-item {
+      padding: 10px 0;
       border: none;
       display: flex;
+      flex-wrap: wrap;
       flex-direction: row;
       align-items: center;
+      width: 100%;
 
       .cart__item-name {
         margin: 0 6px 0 0;
+        min-width: 130px;
       }
 
       .cart__item-price {
         margin: 0 6px;
+        min-width: 34px;
       }
 
       .cart__item-quantity {
         margin: 0 6px;
+        min-width: 22px;
       }
 
       .cart__item-add-btn {
@@ -102,6 +108,17 @@
         }
       }
     }
+
+    .price {
+      background-color: blue;
+      box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+        rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
+        rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+      justify-content: center;
+      @media screen and (min-width: map-get($breakpoins, xs)) {
+        width: 316px;
+      }
+    }
   }
 
   .cart__section {
@@ -124,23 +141,58 @@
   }
 
   .cart__details-item {
+    text-align: center;
     margin-bottom: 16px;
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
       rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+    @media screen and (min-width: map-get($breakpoins, xs)) {
+      width: 316px;
+    }
   }
 
-  .cart__details-item-last {
-    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
-      rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+  .form-label:nth-child(7) {
     margin-bottom: 50px;
+    @media screen and (min-width: map-get($breakpoins, sm)) {
+      margin-bottom: 0;
+    }
   }
 
   .cart__order-btn {
+    min-width: 83px;
     position: absolute;
-    right: 30px;
+    right: 20px;
     font-size: 20px;
-    bottom: 20px;
+    bottom: 45px;
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
       rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+  }
+}
+
+.cart__delivery-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 100%;
+
+  h2 {
+    padding: 10px 10px 10px 10px;
+    font-size: 26px;
+    @media screen and (min-width: map-get($breakpoins, sm)) {
+      margin-bottom: 0;
+      align-self: flex-start;
+      padding: 10px 0 10px 20px;
+      font-size: 32px;
+    }
+
+    @media screen and (min-width: map-get($breakpoins, md)) {
+      padding: 20px 0 0 20px;
+      font-size: 36px;
+    }
+  }
+
+  img {
+    max-width: 100%;
   }
 }

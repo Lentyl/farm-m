@@ -1,7 +1,7 @@
 import React, { FC, FormEvent } from "react";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { signup } from "../store/actions/authAction";
+import { signUp } from "../store/actions/authAction";
 import { Form, Button, Spinner, Col, Container } from "react-bootstrap";
 import { RootState } from "../store";
 import { updateUrl } from "../store/actions/loggedActions";
@@ -21,17 +21,10 @@ const SignUp: FC = () => {
     dispatch(updateUrl(window.location.pathname));
   }, []);
 
-  useEffect(() => {
-    if (authentication) {
-      setLoading(false);
-    }
-  }, [authentication]);
-
   const submitHandler = (e: FormEvent): void => {
     e.preventDefault();
     setLoading(true);
-    dispatch(signup({ name, password, email }, () => setLoading(false)));
-
+    dispatch(signUp({ name, password, email }, () => setLoading(false)));
     setName("");
     setPassword("");
     setEmail("");
@@ -60,18 +53,6 @@ const SignUp: FC = () => {
                 />
                 <Form.Control.Feedback>Wygląda dobrze!</Form.Control.Feedback>
               </Form.Group>
-              <Form.Group as={Col} md="4" controlId="validationCustom02">
-                <Form.Control
-                  required
-                  type="password"
-                  placeholder="hasło"
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.currentTarget.value);
-                  }}
-                />
-                <Form.Control.Feedback>Wygląda dobrze!</Form.Control.Feedback>
-              </Form.Group>
               <Form.Group as={Col} md="4" controlId="validationCustomUsername">
                 <Form.Control
                   required
@@ -80,6 +61,18 @@ const SignUp: FC = () => {
                   value={email}
                   onChange={(e) => {
                     setEmail(e.currentTarget.value);
+                  }}
+                />
+                <Form.Control.Feedback>Wygląda dobrze!</Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group as={Col} md="4" controlId="validationCustom02">
+                <Form.Control
+                  required
+                  type="password"
+                  placeholder="hasło"
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.currentTarget.value);
                   }}
                 />
                 <Form.Control.Feedback>Wygląda dobrze!</Form.Control.Feedback>

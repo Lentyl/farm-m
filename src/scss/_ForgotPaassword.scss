@@ -6,7 +6,7 @@
   background-repeat: no-repeat;
   width: 100%;
   top: 0;
-  height: 100vh;
+  height: 100%;
 
   @media screen and (min-width: map-get($breakpoins, md)) {
     background-image: url("../assets/img/sign-up-background-mobile-640.jpg");
@@ -21,14 +21,14 @@
   }
 
   .forgot-password__container {
-    padding: 10px;
+    padding-top: 10px;
     background-color: rgba(255, 255, 255, 0.7);
-    margin: 250px auto;
+    margin: 50px auto;
     position: relative;
     width: 90%;
-    padding-bottom: 50px;
-    @media screen and (min-width: map-get($breakpoins, sm)) {
-    }
+    padding-bottom: 20px;
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+
     .forgot-password__header {
       text-align: center;
       font-size: 24px;
@@ -40,7 +40,6 @@
         max-width: 130px;
         margin-top: 10px;
         align-self: flex-end;
-        margin-bottom: 10px;
       }
     }
   }

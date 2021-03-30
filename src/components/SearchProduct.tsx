@@ -1,10 +1,9 @@
 import React, { FC, useEffect, useState } from "react";
 import { Container, ListGroup, Button, Row, Col } from "react-bootstrap";
-import { SellersArr, Order } from "../store/uiData/dataTypes";
+import { SellersArr } from "../store/uiData/dataTypes";
 import { RootState } from "../store";
 import { FaShoppingCart } from "react-icons/fa";
 import Map from "../components/Map";
-import { loadMapApi } from "../mapUtils/googleMapUtils";
 
 import { useDispatch, useSelector } from "react-redux";
 import { setOrder } from "../store/actions/loggedActions";
@@ -13,14 +12,11 @@ const SearchProduct: FC = () => {
   const [sellersArr, setSellersArr] = useState<SellersArr>([]);
   const [dysplayDetails, setDysplayDetails] = useState(false);
   const [chosenSeller, setChosenSeller] = useState(0);
-  const [scriptLoaded, setScriptLoaded] = useState(false);
-
-  const { sellersProducts } = useSelector((state: RootState) => state.logged);
-  let { order } = useSelector((state: RootState) => state.logged);
-  let { authentication } = useSelector((state: RootState) => state.auth);
-  const dispatch = useDispatch();
 
   const { mapLoaded } = useSelector((state: RootState) => state.logged);
+  const { sellersProducts } = useSelector((state: RootState) => state.logged);
+  let { authentication } = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setSellersArr(sellersProducts);
@@ -67,15 +63,17 @@ const SearchProduct: FC = () => {
               <ListGroup.Item key={i} className="search__list-item">
                 <div className="search__list-item-element-container">
                   {seller.products.map((product, i) => {
-                    console.log(seller.searchedProduct, product.name);
-                    if (product.name === seller.searchedProduct) {
+                    if (
+                      product.name ===
+                      seller.searchedProduct.toLocaleLowerCase()
+                    ) {
                       return (
                         <div key={i} className="search__list-item-paragraph">
                           <p className="search__list-item-paragraph-element">
-                            nazwa: {product.name},
+                            nazwa: {product.name}
                           </p>
                           <p className="search__list-item-paragraph-element">
-                            cena: {product.price} zł,
+                            cena: {product.price} zł
                           </p>
                           <p className="search__list-item-paragraph-element">
                             waga: 1szt - {product.capacity} kg
@@ -141,7 +139,7 @@ const SearchProduct: FC = () => {
                     cena: {product.price} zł
                   </Col>
                   <Col className="search__details-col" sm="auto">
-                    waga opakowania: {product.capacity} kg
+                    waga: 1szt - {product.capacity} kg
                   </Col>
                   <Col className="search__details-col" sm="auto">
                     <Button

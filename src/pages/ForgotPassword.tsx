@@ -31,7 +31,7 @@ const ForgotPassword: FC = () => {
             name="email"
             value={email}
             onChange={(e) => setEmail(e.currentTarget.value)}
-            placeholder="email address"
+            placeholder="e-mail"
           />
           <Button
             className="forgot-password__btn"
